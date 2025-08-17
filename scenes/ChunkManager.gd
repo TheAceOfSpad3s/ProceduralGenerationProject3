@@ -46,7 +46,7 @@ func _process(delta: float) -> void:
 	# Move all ravines
 	for r in ravines:
 		r.position.z += speed * delta
-	
+		
 	time_until_next_recycle -= delta
 	
 	if ravines.size() > 0 and ravines[0].position.z >= ravine_length:

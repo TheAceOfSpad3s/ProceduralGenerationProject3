@@ -14,12 +14,20 @@ extends Node3D
 @export_range(0.01, 1.0, 0.01, "step") var rock_noise_frequency := 1 # frequency of the rock protrusions
 
 # --- Rock scattering properties ---
-@export_range(10, 500, 1, "step") var rock_count := 200
-@export_range(1.0, 100.0, 0.5, "step") var max_rock_scale := 5.0
-@export_range(0.0, 1.0, 0.05, "step") var rock_flatness_threshold := 100
+@export_range(10, 500, 1, "step") var rock_count := 25
+# Increased the max rock scale to make rocks more visible
+@export_range(1.0, 100.0, 0.5, "step") var max_rock_scale := 10.0
+# Removed the `rock_flatness_threshold` as the new logic will handle this
+# with a more continuous distribution.
 
 # --- Preload the material directly from the file system ---
 var rock_material = preload("res://Shaders/RockMaterial.material")
+# --- Load the rock scenes from the Models folder ---
+@export var rock_scenes: Array[PackedScene] = [
+	preload("res://Models/Rocks1.glb"),
+	preload("res://Models/Rocks2.glb"),
+	preload("res://Models/Rocks3.glb")
+]
 
 # The total width of the chunk will now be dynamically calculated.
 var ravine_width: float = 0.0
@@ -32,10 +40,7 @@ var shader: ShaderMaterial = preload("res://Shaders/Ravine.tres")
 func _ready():
 	call_deferred("scatter_rocks")
 
-func _property_list_changed():
-	if Engine.is_editor_hint():
-		generate_mesh(0.0)
-		call_deferred("scatter_rocks")
+
 
 func set_noise_reference(shared_ravine_noise: FastNoiseLite) -> void:
 	ravine_noise = shared_ravine_noise
@@ -162,7 +167,28 @@ func generate_mesh(world_z_offset: float) -> void:
 	# Step 6: Apply the material for shading
 	$Terrain.material_override = shader
 
+# A helper function to find the first MeshInstance3D in a scene
+# This is needed because the rock scenes are .glb files which may have other nodes
+# like an inherited Node3D or a Camera, etc.
+func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
+	if not node:
+		return null
+	
+	if node is MeshInstance3D:
+		return node
+	
+	for child in node.get_children():
+		var found_mesh = _find_first_mesh_instance(child)
+		if found_mesh:
+			return found_mesh
+	
+	return null
+
 func scatter_rocks():
+	if rock_scenes.is_empty():
+		push_warning("No rock scenes are assigned to the rock_scenes array. Skipping rock scattering.")
+		return
+	
 	# Check if the RockScatter node exists. If not, create it.
 	var multi_mesh_instance = find_child("RockScatter", true, false)
 	if not multi_mesh_instance:
@@ -170,27 +196,48 @@ func scatter_rocks():
 		multi_mesh_instance.name = "RockScatter"
 		add_child(multi_mesh_instance)
 	
-	# Simple cube mesh as placeholder
-	var cube_mesh = BoxMesh.new()
-	cube_mesh.size = Vector3(1, 1, 1) # default, will be scaled
+	# Clear previous rocks
+	multi_mesh_instance.multimesh = null
 	
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	
+	# Randomly select a scene from the array.
+	var selected_scene = rock_scenes[rng.randi_range(0, rock_scenes.size() - 1)]
+	
+	# Instantiate the scene to get the mesh data.
+	var instance = selected_scene.instantiate()
+	var mesh_instance = _find_first_mesh_instance(instance)
+	instance.queue_free()
+	
+	if not mesh_instance or not mesh_instance.mesh:
+		push_error("Could not find a valid MeshInstance3D with a mesh in the selected rock scene.")
+		instance.queue_free()
+		return
+		
 	var multi_mesh = MultiMesh.new()
-	multi_mesh.mesh = cube_mesh
+	multi_mesh.mesh = mesh_instance.mesh
 	multi_mesh.transform_format = MultiMesh.TRANSFORM_3D
 	multi_mesh.instance_count = rock_count
 	
 	multi_mesh_instance.multimesh = multi_mesh
 	
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-
 	# --- Apply the rock material to the MultiMeshInstance3D node, not the MultiMesh resource ---
 	if rock_material:
 		multi_mesh_instance.material_override = rock_material
 	
-	for i in range(rock_count):
+	# Get the mesh's AABB to normalize the scale.
+	var mesh_aabb = mesh_instance.mesh.get_aabb()
+	# We use the longest side of the bounding box to normalize the scale.
+	var normalization_factor = 1.0 / max(mesh_aabb.size.x, mesh_aabb.size.y, mesh_aabb.size.z)
+	
+	# Clean up the temporary instance after we've gotten the mesh.
+	instance.queue_free()
+	
+	var rocks_placed_count = 0
+	while rocks_placed_count < rock_count:
 		var rand_x = rng.randf_range(-ravine_width / 2.0, ravine_width / 2.0)
-		var rand_z = rng.randf_range(-ravine_length / 2.0, ravine_length / 2.0)
+		var rand_z = rng.randf_range(-ravine_length, ravine_length)
 		
 		# Ravine centerline (same logic as mesh gen)
 		var ravine_noise_val = ravine_noise.get_noise_2d(0, rand_z * ravine_frequency)
@@ -199,12 +246,15 @@ func scatter_rocks():
 		var distance = abs(rand_x - ravine_center_x)
 		var normalized_divot_distance = distance / (divot_width / 2.0)
 		
-		# Check if the point is within the flat bottom of the ravine
-		if normalized_divot_distance < rock_flatness_threshold:
+		# NEW LOGIC: Use a continuous probability distribution for scattering
+		# A random number between 0 and 1. If it's less than (1 - normalized_divot_distance), place the rock.
+		# This means rocks are most likely to appear at the center (normalized_divot_distance is 0)
+		# and least likely on the edges (normalized_divot_distance is 1).
+		if rng.randf() < (1.0 - normalized_divot_distance):
 			
-			# Rock scale
-			var random_scale = rng.randf_range(0.5, max_rock_scale)
-			var scale_vec = Vector3.ONE * random_scale
+			# Rock scale - Now using the normalization factor to make scale consistent
+			var random_scale = rng.randf_range(5.0, max_rock_scale)
+			var scale_vec = Vector3.ONE * random_scale * normalization_factor
 			
 			# Embed rock at a fixed depth, as requested.
 			var embedded_y = -ravine_depth
@@ -216,4 +266,8 @@ func scatter_rocks():
 			var new_transform = Transform3D(new_rotation.scaled(scale_vec), Vector3(rand_x, embedded_y, rand_z))
 			
 			# Apply to multimesh
-			multi_mesh.set_instance_transform(i, new_transform)
+			multi_mesh.set_instance_transform(rocks_placed_count, new_transform)
+			rocks_placed_count += 1
+
+	
+	
