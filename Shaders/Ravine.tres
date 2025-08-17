@@ -1,0 +1,20 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://uyr2bxuib8dt"]
+
+[ext_resource type="Shader" path="res://Shaders/RavineScript.gdshader" id="1_bed65"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_bed65")
+shader_parameter/top_color = Color(0.422062, 0.332665, 0.246528, 1)
+shader_parameter/middle_color = Color(0.5, 0.4, 0.3, 1)
+shader_parameter/bottom_color = Color(0.3, 0.2, 0.1, 1)
+shader_parameter/slope_steepness = 0.5
+shader_parameter/slope_flatness = 0.612
+shader_parameter/height_transition_top = 0.7
+shader_parameter/height_transition_bottom = 0.2
+shader_parameter/ravine_depth = 16.255
+shader_parameter/side_height = 20.952
+shader_parameter/rock_color_1 = Color(0.43936, 0.347114, 0.258265, 1)
+shader_parameter/rock_color_2 = Color(0.327705, 0.254733, 0.184309, 1)
+shader_parameter/rock_color_3 = Color(0.234699, 0.178886, 0.124968, 1)
+shader_parameter/patch_scale = 7.0

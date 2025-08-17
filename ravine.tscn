@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://bswt8c4k8b3wn"]
+
+[ext_resource type="Script" path="res://scenes/Ravine.gd" id="1_cwn3p"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ofl2y"]
+
+[node name="RavineScene" type="Node3D"]
+
+[node name="Ravine" type="Node3D" parent="."]
+script = ExtResource("1_cwn3p")
+
+[node name="Terrain" type="MeshInstance3D" parent="Ravine"]
+mesh = SubResource("ArrayMesh_ofl2y")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ravine"]

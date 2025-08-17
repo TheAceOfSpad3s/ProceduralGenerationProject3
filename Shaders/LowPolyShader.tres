@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cfpsls65ywjgb"]
+
+[ext_resource type="Shader" path="res://Shaders/HeightColorShader.gdshader" id="1_lt3bk"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_lt3bk")
+shader_parameter/low_color = Color(0.1, 0.6, 0.2, 1)
+shader_parameter/mid_color = Color(0.5, 0.35, 0.2, 1)
+shader_parameter/high_color = Color(1, 1, 1, 1)
+shader_parameter/low_height = 2.0
+shader_parameter/mid_height = 2.0
+shader_parameter/high_height = 8.0

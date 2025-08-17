@@ -1,0 +1,20 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cxvg34l42whbq"]
+
+[ext_resource type="Shader" path="res://Shaders/TerrainShaderScript.gdshader" id="1_cntp7"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_cntp7")
+shader_parameter/high_color = Color(1, 1, 1, 1)
+shader_parameter/rock_color = Color(0.350095, 0.31079, 0.271412, 1)
+shader_parameter/min_height = -0.5
+shader_parameter/max_height = 30.0
+shader_parameter/slope_threshold = 0.618
+shader_parameter/slope_transition_width = 0.081
+shader_parameter/rock_min_height = -1.315
+shader_parameter/rock_blend_height_start = 13.082
+shader_parameter/rock_blend_height_end = 10.96
+shader_parameter/green_color_1 = Color(0, 0.419608, 0, 1)
+shader_parameter/green_color_2 = Color(0, 0.6, 0, 1)
+shader_parameter/green_color_3 = Color(0.443137, 0.45098, 0.211765, 1)
+shader_parameter/grass_patch_scale = 5.0
