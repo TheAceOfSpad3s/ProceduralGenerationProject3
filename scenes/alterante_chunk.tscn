@@ -16,7 +16,7 @@ sky = SubResource("Sky_lhb0g")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_t04jh"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_omvx3"]
 _surfaces = [{
 "aabb": AABB(-40, -16.0445, -40, 80, 31.5669, 80),
 "format": 34359738375,
@@ -51,4 +51,4 @@ shadow_enabled = true
 [node name="Terrain" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
 material_override = ExtResource("2_sw07a")
-mesh = SubResource("ArrayMesh_t04jh")
+mesh = SubResource("ArrayMesh_omvx3")

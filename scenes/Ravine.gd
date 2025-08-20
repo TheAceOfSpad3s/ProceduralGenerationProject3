@@ -40,8 +40,6 @@ var shader: ShaderMaterial = preload("res://Shaders/Ravine.tres")
 func _ready():
 	call_deferred("scatter_rocks")
 
-
-
 func set_noise_reference(shared_ravine_noise: FastNoiseLite) -> void:
 	ravine_noise = shared_ravine_noise
 
