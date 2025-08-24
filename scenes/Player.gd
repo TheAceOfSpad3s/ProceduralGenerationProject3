@@ -13,21 +13,23 @@ var currentState : State = State.DEFUALT
 @onready var jet_model = $JetModel
 @onready var roll_timer = $RollTimer
 @onready var roll_cooldown = $RollCooldown
+
 # Consts
 const BANK_AMOUNT = PI/10.0
-var current_z_rotation = 0.0
+var roll_x_direction = 0.0
 var angular_velocity: float = 0.0
 
 
 func _physics_process(delta: float) -> void:
 	var input_direction = Vector2(
-		Input.get_action_strength("move_right") - Input.get_action_strength("ui_left"),
-		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
+		Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
 	)
 	if Input.is_action_just_pressed("roll") and roll_cooldown.time_left == 0 and input_direction.x != 0 :
 		roll_timer.start()
 		roll_cooldown.start()
 		angular_velocity = TAU/roll_timer.wait_time * input_direction.x
+		roll_x_direction = input_direction.x
 		currentState = State.ROLLING
 	if currentState == State.DEFUALT:
 		# --- 1. Get User Input ---
@@ -50,8 +52,7 @@ func _physics_process(delta: float) -> void:
 		var elapsed_time = roll_timer.wait_time - roll_timer.time_left
 		jet_model.rotation.z = angular_velocity * elapsed_time 
 		
-		velocity.x = input_direction.x * roll_speed
-		
+		velocity.x = roll_x_direction* roll_speed
 	# This function handles all movement and physics collisions for us!
 	move_and_slide()
 

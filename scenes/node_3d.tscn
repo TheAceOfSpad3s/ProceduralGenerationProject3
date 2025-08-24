@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://od0fadvclxcq"]
 
-[ext_resource type="Script" path="res://CharacterBody3D.gd" id="1_3n3fg"]
+[ext_resource type="Script" path="res://scenes/CharacterBody3D.gd" id="1_3n3fg"]
 
 [node name="Node3D" type="Node3D"]
 
