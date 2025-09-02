@@ -9,7 +9,7 @@ void process() {
 	// requires that LIFETIME = number of particles
 	float amount = LIFETIME;
 	
-	vec4 a = EMISSION_TRANSFORM * vec4(0,1,-150,1);
+	vec4 a = EMISSION_TRANSFORM * vec4(0,1,-100,1);
 	vec4 b = EMISSION_TRANSFORM * vec4(0,-1,0,1);
 	
 	// start

@@ -180,49 +180,50 @@ size = Vector2(0.02, 0.02)
 [sub_resource type="BoxShape3D" id="BoxShape3D_cyk4r"]
 size = Vector3(1.8163, 0.195557, 1.94562)
 
-[node name="Jet" type="CharacterBody3D"]
+[node name="Player" type="Node3D"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
-motion_mode = 1
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
 script = ExtResource("1_bdvmp")
 
-[node name="JetModel" type="MeshInstance3D" parent="."]
+[node name="JetModel" type="MeshInstance3D" parent="CharacterBody3D"]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -3.26315e-08, 0, 0.373261)
 mesh = SubResource("ArrayMesh_spt3w")
 skeleton = NodePath("")
 
-[node name="TrailLeft" type="GPUParticles3D" parent="JetModel"]
+[node name="TrailLeft" type="GPUParticles3D" parent="CharacterBody3D/JetModel"]
 process_priority = 1
 transform = Transform3D(0.1, 0, 1.15463e-14, 0, 0.1, 0, -1.15463e-14, 0, 0.1, 4, 0.048, -3.333)
-amount = 7
-lifetime = 7.0
+amount = 10
+lifetime = 10.0
 explosiveness = 1.0
-fixed_fps = 100
+fixed_fps = 60
 process_material = SubResource("ShaderMaterial_huev6")
 draw_pass_1 = SubResource("QuadMesh_ldgf0")
 script = ExtResource("4_2g0db")
-length = 7
-length_seconds = 0.07
+length = 10
+length_seconds = 0.166667
 color_ramp = SubResource("GradientTexture1D_m1c1u")
 curve = SubResource("CurveTexture_m4tw0")
 _defaults_have_been_set = true
 
-[node name="TrailRight" type="GPUParticles3D" parent="JetModel"]
+[node name="TrailRight" type="GPUParticles3D" parent="CharacterBody3D/JetModel"]
 process_priority = 1
-transform = Transform3D(0.1, 0, 1.77636e-14, 0, 0.1, 0, -1.77636e-14, 0, 0.1, -4, 0.048, -3.333)
-amount = 7
-lifetime = 7.0
+transform = Transform3D(0.1, 0, 1.68754e-14, 0, 0.1, 0, -1.68754e-14, 0, 0.1, -4, 0.048, -3.333)
+amount = 10
+lifetime = 10.0
 explosiveness = 1.0
-fixed_fps = 100
+fixed_fps = 60
 process_material = SubResource("ShaderMaterial_huev6")
 draw_pass_1 = SubResource("QuadMesh_ldgf0")
 script = ExtResource("4_2g0db")
-length = 7
-length_seconds = 0.07
+length = 10
+length_seconds = 0.166667
 color_ramp = SubResource("GradientTexture1D_m1c1u")
 curve = SubResource("CurveTexture_m4tw0")
 _defaults_have_been_set = true
 
-[node name="EngineLeft" type="GPUParticles3D" parent="JetModel"]
+[node name="EngineLeft" type="GPUParticles3D" parent="CharacterBody3D/JetModel"]
 transform = Transform3D(-0.99999, 0, -0.0044681, 0, 1, 0, 0.0044681, 0, -0.99999, 0.6774, 0.0885589, -4.79693)
 amount = 3
 lifetime = 0.1
@@ -231,7 +232,7 @@ randomness = 0.5
 process_material = SubResource("ParticleProcessMaterial_n8nah")
 draw_pass_1 = SubResource("QuadMesh_o4w22")
 
-[node name="EngineRight" type="GPUParticles3D" parent="JetModel"]
+[node name="EngineRight" type="GPUParticles3D" parent="CharacterBody3D/JetModel"]
 transform = Transform3D(-0.99999, 0, -0.0044681, 0, 1, 0, 0.0044681, 0, -0.99999, -0.685963, 0.0885589, -4.79693)
 amount = 3
 lifetime = 0.1
@@ -240,28 +241,18 @@ randomness = 0.5
 process_material = SubResource("ParticleProcessMaterial_n8nah")
 draw_pass_1 = SubResource("QuadMesh_o4w22")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 transform = Transform3D(1, -0.000144896, -0.000780558, 0.000144524, 1, -0.000507988, 0.000780627, 0.000507882, 1, -0.0343857, 0.0189209, 0.0611877)
 shape = SubResource("BoxShape3D_cyk4r")
 disabled = true
 
-[node name="RollTimer" type="Timer" parent="."]
+[node name="RollTimer" type="Timer" parent="CharacterBody3D"]
 process_callback = 0
 wait_time = 0.75
 
-[node name="RollCooldown" type="Timer" parent="."]
+[node name="RollCooldown" type="Timer" parent="CharacterBody3D"]
 wait_time = 0.5
 one_shot = true
 autostart = true
 
-[node name="CameraController" type="Node3D" parent="."]
-top_level = true
-
-[node name="CameraTarget" type="Node3D" parent="CameraController"]
-transform = Transform3D(-1, -1.51808e-08, -8.60946e-08, 0, 0.984807, -0.173648, 8.74228e-08, -0.173648, -0.984807, 0, 0.417999, 1.56011)
-
-[node name="Camera3D" type="Camera3D" parent="CameraController/CameraTarget"]
-transform = Transform3D(-1, -2.6054e-15, -1.50996e-07, -7.10543e-15, 1, 2.98023e-08, 1.50996e-07, 2.98023e-08, -1, 0, 0, 0)
-fov = 60.0
-
-[connection signal="timeout" from="RollTimer" to="." method="_on_roll_timer_timeout"]
+[connection signal="timeout" from="CharacterBody3D/RollTimer" to="CharacterBody3D" method="_on_roll_timer_timeout"]

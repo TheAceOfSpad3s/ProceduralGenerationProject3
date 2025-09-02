@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://8mrquvwvbfmb"]
+
+[ext_resource type="Script" path="res://scenes/Mountain.gd" id="1_58ogy"]
+
+[node name="Mountain" type="Node3D"]
+script = ExtResource("1_58ogy")
+
+[node name="Terrain" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.410656, -0.1754, 0.680084)

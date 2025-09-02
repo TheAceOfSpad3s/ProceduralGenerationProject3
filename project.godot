@@ -11,9 +11,8 @@ config_version=5
 [application]
 
 config/name="Procedural Generation Test 3"
-run/main_scene="res://scenes/ChunkManager.tscn"
+run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://icon.svg"
 
 [editor_plugins]
 

@@ -4,8 +4,13 @@
 [ext_resource type="Material" uid="uid://cxvg34l42whbq" path="res://Shaders/TerrainShader.tres" id="2_sw07a"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_y4dpi"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+sky_top_color = Color(0.183972, 0.22652, 0.285693, 1)
+sky_horizon_color = Color(0.48212, 0.644104, 1, 1)
+sky_curve = 0.289781
+ground_bottom_color = Color(0.147224, 0.150552, 0.32415, 1)
+ground_horizon_color = Color(0.40559, 0.662859, 1, 1)
+ground_curve = 0.0546417
+sun_curve = 0.121838
 
 [sub_resource type="Sky" id="Sky_lhb0g"]
 sky_material = SubResource("ProceduralSkyMaterial_y4dpi")
@@ -14,9 +19,20 @@ sky_material = SubResource("ProceduralSkyMaterial_y4dpi")
 background_mode = 2
 sky = SubResource("Sky_lhb0g")
 tonemap_mode = 2
+ssao_intensity = 16.0
+ssil_radius = 16.0
+sdfgi_enabled = true
+sdfgi_use_occlusion = true
+sdfgi_energy = 1.89
 glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.4588, 0.558627, 0.689001, 1)
+fog_sun_scatter = 1.0
+fog_aerial_perspective = 1.0
+fog_height = 20.0
+fog_height_density = 0.3
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_7hdjg"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_pu6yk"]
 _surfaces = [{
 "aabb": AABB(-40, -16.0445, -40, 80, 31.5669, 80),
 "format": 34359738375,
@@ -51,4 +67,7 @@ shadow_enabled = true
 [node name="Terrain" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
 material_override = ExtResource("2_sw07a")
-mesh = SubResource("ArrayMesh_7hdjg")
+mesh = SubResource("ArrayMesh_pu6yk")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.907044, 0.421036, 0, -0.421036, 0.907044, 0, 50, 55)

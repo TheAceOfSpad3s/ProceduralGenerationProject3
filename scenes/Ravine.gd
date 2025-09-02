@@ -38,8 +38,8 @@ var shader: ShaderMaterial = preload("res://Shaders/Ravine.tres")
 
 # Use _ready() to make sure the rocks are scattered when the game starts
 func _ready():
-	call_deferred("scatter_rocks")
-
+	#call_deferred("scatter_rocks")
+	pass
 func set_noise_reference(shared_ravine_noise: FastNoiseLite) -> void:
 	ravine_noise = shared_ravine_noise
 

@@ -1,14 +1,14 @@
 extends Node3D
 
-@export var chunk_width := 100.0
-@export var chunk_length := 50.0
+@export var mountain_width := 100.0
+@export var mountain_length := 50.0
 @export var subdivisions_x := 20
 @export var subdivisions_z := 25
 @export var height_scale := 20.0
 @export var noise_scale := 0.2
 
 var noise: FastNoiseLite = null
-var chunk_id: int = 0
+var mountain_id: int = 0
 var shader: ShaderMaterial = preload("res://Shaders/TerrainShader.tres")
 
 func set_noise_reference(shared_noise: FastNoiseLite) -> void:
@@ -16,12 +16,12 @@ func set_noise_reference(shared_noise: FastNoiseLite) -> void:
 
 func generate_mesh(world_z_offset: float) -> void:
 	if noise == null:
-		push_error("Chunk.generate_mesh: noise is null — call set_noise_reference(shared_noise) first.")
+		push_error("mountain.generate_mesh: noise is null — call set_noise_reference(shared_noise) first.")
 		return
 
 	# Step 1: Make subdivided plane
 	var plane := PlaneMesh.new()
-	plane.size = Vector2(chunk_width, chunk_length)
+	plane.size = Vector2(mountain_width, mountain_length)
 	plane.subdivide_width = subdivisions_x
 	plane.subdivide_depth = subdivisions_z
 
