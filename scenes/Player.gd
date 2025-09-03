@@ -7,7 +7,7 @@ extends CharacterBody3D
 @export var bank_rotation_speed := 5.0
 enum State {DEFUALT, ROLLING, DEAD}
 enum CameraState {Mountain, Ravine}
-
+signal Player_Dead
 var currentState : State = State.DEFUALT
 var currentCameraState: CameraState = CameraState.Mountain
 var camerafov = 110.0 if currentCameraState == CameraState.Mountain else 60.0
@@ -17,6 +17,7 @@ var camerafov = 110.0 if currentCameraState == CameraState.Mountain else 60.0
 @onready var camera_controller = $CameraController
 @onready var camera_target = $CameraController/CameraTarget
 @onready var camera = $CameraController/CameraTarget/Camera3D
+#@onready var death_camera = $CameraController/CameraTarget/TemporaryDeathCamera
 # Consts
 const BANK_AMOUNT = PI/10.0
 var roll_x_direction = 0.0
@@ -24,11 +25,20 @@ var angular_velocity: float = 0.0
 
 
 func _physics_process(delta: float) -> void:
+	if currentState == State.DEAD:
+		var target_postion_for_death_camera = Vector3(-2.215,1,3)
+		camera_controller.position  = lerp(camera_controller.position,target_postion_for_death_camera, 0.05)
+		var target_rotation_for_death_camera = Vector3(deg_to_rad(-13.4),deg_to_rad(-86.6),0)
+		camera_target.rotation = lerp(camera_target.rotation, target_rotation_for_death_camera, delta*3.0)
+		Player_Dead.emit()
+		#In Order To Stop all Player Code(IMPORTANT)
+		return
+		
 	var input_direction = Vector2(
 		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
 		Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
 	)
-	if Input.is_action_just_pressed("roll") and roll_cooldown.time_left == 0 and input_direction.x != 0 :
+	if Input.is_action_just_pressed("roll") and roll_cooldown.time_left == 0 and input_direction.x != 0:
 		roll_timer.start()
 		roll_cooldown.start()
 		angular_velocity = TAU/roll_timer.wait_time * input_direction.x
@@ -57,7 +67,12 @@ func _physics_process(delta: float) -> void:
 		
 		velocity.x = roll_x_direction* roll_speed
 	# This function handles all movement and physics collisions for us!
-	move_and_slide()
+	if move_and_slide():
+		var collision = get_slide_collision(0)
+		if collision:
+			# If we collide with something, change the state to DEAD
+			currentState = State.DEAD
+			print("Collision detected!")
 	
 		
 	#Match Camera Controller Match the positon of myself
@@ -65,16 +80,18 @@ func _physics_process(delta: float) -> void:
 	camera_controller.position  = lerp(camera_controller.position,position,lerp_speed)
 	#Changing Settings of Camera based on Chunk Type
 	var target_fov = 100.0 if currentCameraState == CameraState.Mountain else 65.0
-	camera.fov = lerp(camera.fov, target_fov, delta * 5.0)
+	camera.fov = lerp(camera.fov, target_fov, delta * 3.0)
 	var target_positon_camera = Vector3(0,0.784,1.635) if currentCameraState == CameraState.Mountain else Vector3(0,0.418,1.56)
-	camera_target.position = lerp(camera_target.position,target_positon_camera, delta*5.0)
+	camera_target.position = lerp(camera_target.position,target_positon_camera, delta*3.0)
 	var target_rotation_camera = Vector3(deg_to_rad(22.9),-PI,0) if currentCameraState == CameraState.Mountain else Vector3(deg_to_rad(10),-PI,0)
-	camera_target.rotation = lerp(camera_target.rotation, target_rotation_camera, delta*5.0)
+	camera_target.rotation = lerp(camera_target.rotation, target_rotation_camera, delta*3.0)
 
 
 func _on_roll_timer_timeout():
 	roll_timer.stop()
-	currentState = State.DEFUALT
+	
+	if currentState != State.DEAD:
+		currentState = State.DEFUALT
 
 
 func _on_chunk_manager_chunk_type(chunk_type):

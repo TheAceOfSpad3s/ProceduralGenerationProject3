@@ -1,9 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://8mrquvwvbfmb"]
+[gd_scene load_steps=4 format=3 uid="uid://8mrquvwvbfmb"]
 
 [ext_resource type="Script" path="res://scenes/Mountain.gd" id="1_58ogy"]
 
-[node name="Mountain" type="Node3D"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_ox1lj"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_4igmn"]
+
+[node name="Mountain" type="RigidBody3D"]
+collision_layer = 2
+mass = 0.01
+gravity_scale = 0.0
+freeze_mode = 1
 script = ExtResource("1_58ogy")
 
 [node name="Terrain" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.410656, -0.1754, 0.680084)
+mesh = SubResource("ArrayMesh_ox1lj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_4igmn")

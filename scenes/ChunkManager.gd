@@ -15,7 +15,7 @@ var time_until_next_recycle: float = 0.0
 var recycle_threshold: float = 0.0
 var is_transitioning: bool = false
 var normal_fog_depth: float = 0.0
-
+var player_dead = false
 # Ravine
 @export var ravine_scenes: Array[PackedScene] = []
 @export var ravine_frequency: float = 0.05
@@ -129,6 +129,9 @@ func _spawn_next_chunk():
 
 
 func _process(delta: float) -> void:
+	if player_dead:
+		return
+	
 	# Move all active chunks regardless of type
 	for chunk in active_chunks:
 		chunk.position.z += speed * delta
@@ -181,15 +184,15 @@ func _on_chunk_timer_timeout():
 	chunk_timer.stop()
 	is_transitioning = true
 	# Tween the fog to become thick and opaque
-
 	# Corrected property access to go through the `environment` resource
-	
 	fog_timer.start()
-
-
 func _on_fog_timer_timeout():
 	fog_timer.stop()
 	_choose_current_scene()
 	is_transitioning = false
 	chunk_timer.start()
 	_instantiate_chunks()
+
+
+func _on_player_player_dead():
+	player_dead = true

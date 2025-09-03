@@ -178,10 +178,11 @@ material = SubResource("StandardMaterial3D_1ps16")
 size = Vector2(0.02, 0.02)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cyk4r"]
-size = Vector3(1.8163, 0.195557, 1.94562)
+size = Vector3(0.720822, 0.195557, 1.31148)
 
 [node name="Jet" type="CharacterBody3D"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_bdvmp")
 
@@ -241,9 +242,8 @@ process_material = SubResource("ParticleProcessMaterial_n8nah")
 draw_pass_1 = SubResource("QuadMesh_o4w22")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, -0.000144896, -0.000780558, 0.000144524, 1, -0.000507988, 0.000780627, 0.000507882, 1, -0.0343857, 0.0189209, 0.0611877)
+transform = Transform3D(1, -0.000144896, -0.000780558, 0.000144524, 1, -0.000507988, 0.000780627, 0.000507882, 1, -0.00231741, 0.0187968, 0.314608)
 shape = SubResource("BoxShape3D_cyk4r")
-disabled = true
 
 [node name="RollTimer" type="Timer" parent="."]
 process_callback = 0
@@ -258,10 +258,14 @@ autostart = true
 top_level = true
 
 [node name="CameraTarget" type="Node3D" parent="CameraController"]
-transform = Transform3D(-1, -1.51808e-08, -8.60946e-08, 0, 0.984807, -0.173648, 8.74228e-08, -0.173648, -0.984807, 0, 0.417999, 1.56011)
+transform = Transform3D(-1, -2.62201e-08, -1.48702e-07, 0, 0.984807, -0.173648, 1.50996e-07, -0.173648, -0.984807, 0, 0.417999, 1.56011)
 
 [node name="Camera3D" type="Camera3D" parent="CameraController/CameraTarget"]
 transform = Transform3D(-1, -2.6054e-15, -1.50996e-07, -7.10543e-15, 1, 2.98023e-08, 1.50996e-07, 2.98023e-08, -1, 0, 0, 0)
 fov = 60.0
+
+[node name="TemporaryDeathCamera" type="Camera3D" parent="."]
+transform = Transform3D(0.0600729, 0.232024, -0.970853, 0, 0.97261, 0.232444, 0.998194, -0.0139636, 0.0584275, -2.21492, 0.647605, 0.381982)
+fov = 47.9
 
 [connection signal="timeout" from="RollTimer" to="." method="_on_roll_timer_timeout"]

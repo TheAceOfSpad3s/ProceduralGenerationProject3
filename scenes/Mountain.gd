@@ -67,7 +67,7 @@ func generate_mesh(world_z_offset: float) -> void:
 
 	# Step 5: Assign to MeshInstance
 	$Terrain.mesh = mesh
-	$Terrain.create_trimesh_collision()
+	$CollisionShape3D.shape = mesh.create_trimesh_shape()
 	$Terrain.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 # Step 6: Apply the material for shading

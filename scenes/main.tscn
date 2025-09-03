@@ -31,4 +31,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="ChunkManager" parent="." instance=ExtResource("2_sfjf3")]
 
+[connection signal="Player_Dead" from="Player" to="ChunkManager" method="_on_player_player_dead"]
 [connection signal="chunk_type" from="ChunkManager" to="Player" method="_on_chunk_manager_chunk_type"]
