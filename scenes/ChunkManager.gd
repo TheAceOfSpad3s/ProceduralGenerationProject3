@@ -138,7 +138,6 @@ func _process(delta: float) -> void:
 	# Move all active chunks regardless of type
 	for chunk in active_chunks:
 		chunk.position.z += speed * delta
-		pass
 	if not is_transitioning:
 		# Recycle logic is now unified
 		if active_chunks.size() > 0:
@@ -181,11 +180,12 @@ func _process(delta: float) -> void:
 			if first_chunk.position.z >= chunk_length:
 				first_chunk.queue_free()
 				active_chunks.pop_front()
-		elif active_chunks.size() == 0 and is_scoring:
+		if active_chunks.size() == 0 and is_scoring:
+			print("chunk clear")
 			is_scoring = false
 			Add_Chunk_Clear_Score.emit()
 			Is_Scoring.emit()
-			
+
 
 
 func _on_chunk_timer_timeout():
@@ -197,6 +197,7 @@ func _on_fog_timer_timeout():
 	_choose_current_scene()
 	is_transitioning = false
 	chunk_timer.start()
+	is_scoring = true
 	Is_Scoring.emit()
 	_instantiate_chunks()
 
