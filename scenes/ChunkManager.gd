@@ -10,7 +10,9 @@ extends Node3D
 @onready var chunk_timer = $ChunkTimer
 
 signal chunk_type
-
+signal Is_Scoring()
+signal Add_Chunk_Clear_Score()
+var is_scoring = true
 var time_until_next_recycle: float = 0.0
 var recycle_threshold: float = 0.0
 var is_transitioning: bool = false
@@ -106,7 +108,8 @@ func _spawn_next_chunk():
 	if current_chunk_type == Chunk_Type.Mountains:
 		chunk_length = mountain_length
 		noise_ref = mountain_noise
-		y_pos = 0.0
+		y_pos = -10.0
+		
 	else:
 		chunk_length = ravine_length
 		noise_ref = ravine_noise
@@ -135,7 +138,7 @@ func _process(delta: float) -> void:
 	# Move all active chunks regardless of type
 	for chunk in active_chunks:
 		chunk.position.z += speed * delta
-		
+		pass
 	if not is_transitioning:
 		# Recycle logic is now unified
 		if active_chunks.size() > 0:
@@ -150,7 +153,7 @@ func _process(delta: float) -> void:
 				var y_pos = 0.0
 				var noise_ref = null
 				if current_chunk_type == Chunk_Type.Mountains:
-					y_pos = 0.0
+					y_pos = -10.0
 					noise_ref = mountain_noise
 				else:
 					y_pos = 10.0
@@ -178,21 +181,25 @@ func _process(delta: float) -> void:
 			if first_chunk.position.z >= chunk_length:
 				first_chunk.queue_free()
 				active_chunks.pop_front()
+		elif active_chunks.size() == 0 and is_scoring:
+			is_scoring = false
+			Add_Chunk_Clear_Score.emit()
+			Is_Scoring.emit()
+			
 
 
 func _on_chunk_timer_timeout():
 	chunk_timer.stop()
 	is_transitioning = true
-	# Tween the fog to become thick and opaque
-	# Corrected property access to go through the `environment` resource
 	fog_timer.start()
 func _on_fog_timer_timeout():
 	fog_timer.stop()
 	_choose_current_scene()
 	is_transitioning = false
 	chunk_timer.start()
+	Is_Scoring.emit()
 	_instantiate_chunks()
 
 
-func _on_player_player_dead():
+func _on_main_game_over():
 	player_dead = true

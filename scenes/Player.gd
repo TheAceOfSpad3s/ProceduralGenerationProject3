@@ -8,6 +8,8 @@ extends CharacterBody3D
 enum State {DEFUALT, ROLLING, DEAD}
 enum CameraState {Mountain, Ravine}
 signal Player_Dead
+signal CurrentHeight
+signal AddScore
 var currentState : State = State.DEFUALT
 var currentCameraState: CameraState = CameraState.Mountain
 var camerafov = 110.0 if currentCameraState == CameraState.Mountain else 60.0
@@ -16,21 +18,19 @@ var camerafov = 110.0 if currentCameraState == CameraState.Mountain else 60.0
 @onready var roll_cooldown = $RollCooldown
 @onready var camera_controller = $CameraController
 @onready var camera_target = $CameraController/CameraTarget
-@onready var camera = $CameraController/CameraTarget/Camera3D
-#@onready var death_camera = $CameraController/CameraTarget/TemporaryDeathCamera
+@onready var camera = $CameraController/CameraTarget/PlayerCamera
+@onready var death_camera = $CameraController/CameraTarget/DeathCamera
+@onready var graze_cooldown =$Graze/GrazeCooldown
 # Consts
 const BANK_AMOUNT = PI/10.0
 var roll_x_direction = 0.0
 var angular_velocity: float = 0.0
-
+var can_graze = true
 
 func _physics_process(delta: float) -> void:
 	if currentState == State.DEAD:
-		var target_postion_for_death_camera = Vector3(-2.215,1,3)
-		camera_controller.position  = lerp(camera_controller.position,target_postion_for_death_camera, 0.05)
-		var target_rotation_for_death_camera = Vector3(deg_to_rad(-13.4),deg_to_rad(-86.6),0)
-		camera_target.rotation = lerp(camera_target.rotation, target_rotation_for_death_camera, delta*3.0)
-		Player_Dead.emit()
+		camera_controller.position  = lerp(camera_controller.position,position - death_camera.position, 0.05)
+		camera_target.rotation = lerp(camera_target.rotation, death_camera.rotation, delta*3.0)
 		#In Order To Stop all Player Code(IMPORTANT)
 		return
 		
@@ -71,7 +71,7 @@ func _physics_process(delta: float) -> void:
 		var collision = get_slide_collision(0)
 		if collision:
 			# If we collide with something, change the state to DEAD
-			currentState = State.DEAD
+			Player_Dead.emit()
 			print("Collision detected!")
 	
 		
@@ -85,7 +85,7 @@ func _physics_process(delta: float) -> void:
 	camera_target.position = lerp(camera_target.position,target_positon_camera, delta*3.0)
 	var target_rotation_camera = Vector3(deg_to_rad(22.9),-PI,0) if currentCameraState == CameraState.Mountain else Vector3(deg_to_rad(10),-PI,0)
 	camera_target.rotation = lerp(camera_target.rotation, target_rotation_camera, delta*3.0)
-
+	CurrentHeight.emit(position.y)
 
 func _on_roll_timer_timeout():
 	roll_timer.stop()
@@ -100,3 +100,19 @@ func _on_chunk_manager_chunk_type(chunk_type):
 	elif  chunk_type == 1:
 		currentCameraState = CameraState.Ravine
 
+
+
+func _on_main_game_over():
+	currentState = State.DEAD
+
+
+func _on_area_3d_body_entered(_body):
+	if currentState != State.DEAD and can_graze:
+		print("Body Entered")
+		AddScore.emit()
+		can_graze = false
+		graze_cooldown.start()
+
+
+func _on_graze_cooldown_timeout():
+	can_graze = true

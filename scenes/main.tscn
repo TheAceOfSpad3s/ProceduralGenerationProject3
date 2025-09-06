@@ -1,7 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://27b0ftbl3gd3"]
+[gd_scene load_steps=9 format=3 uid="uid://27b0ftbl3gd3"]
 
 [ext_resource type="PackedScene" uid="uid://j7eb2cgdfiyg" path="res://scenes/Player.tscn" id="1_lx46h"]
+[ext_resource type="Script" path="res://scenes/GameManager.gd" id="1_vh5m1"]
 [ext_resource type="PackedScene" uid="uid://cyc4q8otb424y" path="res://scenes/ChunkManager.tscn" id="2_sfjf3"]
+[ext_resource type="Script" path="res://scenes/UiManager.gd" id="4_extio"]
+[ext_resource type="Script" path="res://scenes/ScoreManager.gd" id="4_on7fe"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h5fu3"]
 sky_top_color = Color(3.85046e-07, 0.500865, 0.600973, 1)
@@ -16,8 +19,16 @@ background_mode = 2
 sky = SubResource("Sky_5u6oq")
 tonemap_mode = 2
 glow_enabled = true
+fog_density = 0.0205
+fog_sky_affect = 0.0
+volumetric_fog_density = 0.01
+volumetric_fog_albedo = Color(0.415686, 1, 1, 1)
+volumetric_fog_gi_inject = 0.0
+volumetric_fog_detail_spread = 0.965936
+volumetric_fog_sky_affect = 0.0
 
 [node name="Main" type="Node3D"]
+script = ExtResource("1_vh5m1")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_xe6ps")
@@ -31,5 +42,40 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="ChunkManager" parent="." instance=ExtResource("2_sfjf3")]
 
-[connection signal="Player_Dead" from="Player" to="ChunkManager" method="_on_player_player_dead"]
+[node name="UiManager" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_extio")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UiManager"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -145.0
+offset_bottom = 40.0
+grow_horizontal = 0
+text = "Score:"
+
+[node name="ScoreManager" type="Node3D" parent="."]
+script = ExtResource("4_on7fe")
+
+[node name="ScoreTimer" type="Timer" parent="ScoreManager"]
+wait_time = 0.1
+autostart = true
+
+[connection signal="GameOver" from="." to="Player" method="_on_main_game_over"]
+[connection signal="GameOver" from="." to="ChunkManager" method="_on_main_game_over"]
+[connection signal="GameOver" from="." to="ScoreManager" method="_on_main_game_over"]
+[connection signal="AddScore" from="Player" to="ScoreManager" method="_on_player_add_score"]
+[connection signal="CurrentHeight" from="Player" to="ScoreManager" method="_on_player_current_height"]
+[connection signal="Player_Dead" from="Player" to="." method="_on_player_player_dead"]
+[connection signal="Add_Chunk_Clear_Score" from="ChunkManager" to="ScoreManager" method="_on_chunk_manager_add_chunk_clear_score"]
+[connection signal="Is_Scoring" from="ChunkManager" to="ScoreManager" method="_on_chunk_manager_is_scoring"]
 [connection signal="chunk_type" from="ChunkManager" to="Player" method="_on_chunk_manager_chunk_type"]
+[connection signal="ScoreUpdated" from="ScoreManager" to="UiManager" method="_on_score_manager_score_updated"]
+[connection signal="timeout" from="ScoreManager/ScoreTimer" to="ScoreManager" method="_on_score_timer_timeout"]

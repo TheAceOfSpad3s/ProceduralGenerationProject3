@@ -10,7 +10,7 @@ ravine_scenes = Array[PackedScene]([ExtResource("2_1frmg")])
 mountain_scenes = Array[PackedScene]([ExtResource("3_0q8qu")])
 
 [node name="ChunkTimer" type="Timer" parent="."]
-wait_time = 10.0
+wait_time = 15.0
 autostart = true
 
 [node name="FogTimer" type="Timer" parent="."]
