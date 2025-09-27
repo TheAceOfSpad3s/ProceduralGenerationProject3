@@ -18,6 +18,7 @@ var is_scoring = true
 var time_until_next_recycle: float = 0.0
 var recycle_threshold: float = 0.0
 var is_transitioning: bool = false
+var new_chunks_spawn: bool = true
 var normal_fog_depth: float = 0.0
 var player_dead = false
 
@@ -54,7 +55,7 @@ var current_scene: PackedScene
 var active_chunks: Array = []
 var last_chunk_position_z: float = 0.0
 var next_id: int = 0
-
+var chunk_length = 0.0
 enum Chunk_Type {Mountains, Ravines, Tranistions}
 var current_chunk_type: Chunk_Type = Chunk_Type.Mountains
 
@@ -87,7 +88,7 @@ func _ready() -> void:
 # New: Chooses the next scene and sets up the active_chunks array
 func _choose_current_scene():
 	if not is_transitioning:
-		var use_mountains = 2 % 2 == 0
+		var use_mountains = randi() % 2 == 0
 		
 		if use_mountains:
 			current_chunk_type = Chunk_Type.Mountains
@@ -122,7 +123,6 @@ func _spawn_next_chunk():
 	var new_chunk = current_scene.instantiate()
 	add_child(new_chunk)
 	
-	var chunk_length = 0
 	var noise_ref = null
 	var y_pos = 0.0
 	
@@ -141,7 +141,6 @@ func _spawn_next_chunk():
 		y_pos = -10.0
 	new_chunk.set_noise_reference(noise_ref)
 	new_chunk.position = Vector3(0, y_pos, last_chunk_position_z - chunk_length)
-	
 	# Pass the correct ID and position for mesh generation
 	if current_chunk_type == Chunk_Type.Mountains:
 		new_chunk.mountain_id = next_id
@@ -159,85 +158,106 @@ func _spawn_next_chunk():
 
 func _process(delta: float) -> void:
 	if player_dead:
+		Fog_Activation.emit(false,0,0)
 		return
 	
 	# Move all active chunks regardless of type
 	for chunk in active_chunks:
 		chunk.position.z += speed * delta
-
+	if new_chunks_spawn:
 	# Recycle logic is now unified
-	if active_chunks.size() > 0:
-		var first_chunk = active_chunks[0]
-		var chunk_length = mountain_length if current_chunk_type == Chunk_Type.Mountains else ravine_length
-		
-		if first_chunk.position.z >= chunk_length:
-			# Recycle the chunk
-			var recycled_chunk = active_chunks.pop_front()
-			var last_chunk = active_chunks.back()
-			
-			var y_pos = 0.0
-			var noise_ref = null
+		if active_chunks.size() > 0:
+			var first_chunk = active_chunks[0]
 			if current_chunk_type == Chunk_Type.Mountains:
-				y_pos = -10.0
-				noise_ref = mountain_noise
+				chunk_length = mountain_length
 			elif current_chunk_type == Chunk_Type.Ravines:
-				y_pos = 0.0
-				noise_ref = ravine_noise
+				chunk_length = ravine_length
 			elif current_chunk_type == Chunk_Type.Tranistions:
-				y_pos = -10.0
-				noise_ref = transition_noise
-			recycled_chunk.position = Vector3(0, y_pos, last_chunk.position.z - chunk_length)
-			recycled_chunk.set_noise_reference(noise_ref)
-			
-			if current_chunk_type == Chunk_Type.Mountains:
-				recycled_chunk.mountain_id = next_id
-				recycled_chunk.generate_mesh(-recycled_chunk.mountain_id * mountain_length)
-			elif current_chunk_type == Chunk_Type.Ravines:
-				recycled_chunk.ravine_id = next_id
-				recycled_chunk.generate_mesh(-recycled_chunk.ravine_id * ravine_length)
-			elif current_chunk_type == Chunk_Type.Tranistions:
-				recycled_chunk.transition_id = next_id
-				recycled_chunk.generate_mesh(-recycled_chunk.transition_id * transition_length)
-			next_id += 1
-			active_chunks.append(recycled_chunk)
+				chunk_length = transition_length
+				
+			if first_chunk.position.z >= chunk_length:
+				# Recycle the chunk
+				var recycled_chunk = active_chunks.pop_front()
+				var last_chunk = active_chunks.back()
+				
+				var y_pos = 0.0
+				var noise_ref = null
+				if current_chunk_type == Chunk_Type.Mountains:
+					y_pos = -10.0
+					noise_ref = mountain_noise
+				elif current_chunk_type == Chunk_Type.Ravines:
+					y_pos = 0.0
+					noise_ref = ravine_noise
+				elif current_chunk_type == Chunk_Type.Tranistions:
+					y_pos = -10.0
+					noise_ref = transition_noise
+				recycled_chunk.position = Vector3(0, y_pos, last_chunk.position.z - chunk_length)
+				recycled_chunk.set_noise_reference(noise_ref)
+				
+				if current_chunk_type == Chunk_Type.Mountains:
+					recycled_chunk.mountain_id = next_id
+					recycled_chunk.generate_mesh(-recycled_chunk.mountain_id * mountain_length)
+				elif current_chunk_type == Chunk_Type.Ravines:
+					recycled_chunk.ravine_id = next_id
+					recycled_chunk.generate_mesh(-recycled_chunk.ravine_id * ravine_length)
+				elif current_chunk_type == Chunk_Type.Tranistions:
+					recycled_chunk.transition_id = next_id
+					recycled_chunk.generate_mesh(-recycled_chunk.transition_id * transition_length)
+				next_id += 1
+				active_chunks.append(recycled_chunk)
 			
 			# Call _choose_current_scene() when you want to switch
 			# You can connect a timer to this function to handle the switching
-	if is_transitioning:
+	if not new_chunks_spawn:
 		if active_chunks.size() > 0:
 			var first_chunk = active_chunks[0]
-			var chunk_length = mountain_length if current_chunk_type == Chunk_Type.Mountains else ravine_length
+			if current_chunk_type == Chunk_Type.Mountains:
+				chunk_length = mountain_length
+			elif current_chunk_type == Chunk_Type.Ravines:
+				chunk_length = ravine_length
+			elif current_chunk_type == Chunk_Type.Tranistions:
+				chunk_length = transition_length			
 			if first_chunk.position.z >= chunk_length:
 				first_chunk.queue_free()
 				active_chunks.pop_front()
-		if active_chunks.size() == 0 and is_scoring:
-			_choose_current_scene()
-			is_scoring = false
-			End_Of_Chunk.emit()
-			print("chunk clear")
-			Add_Chunk_Clear_Score.emit()
-			Is_Scoring.emit()
-			_instantiate_chunks()
+		if active_chunks.size() == 0:
+			if current_chunk_type == Chunk_Type.Tranistions:
+				chunk_timer.start()
+				is_scoring = true
+				Is_Scoring.emit()
+				is_transitioning = false
+				End_Of_Chunk.emit()
+				_choose_current_scene()
+				new_chunks_spawn = true
+				_instantiate_chunks()
+				var fog_offset = -150 if current_chunk_type == Chunk_Type.Mountains else -250
+				Fog_Activation.emit(false, speed, fog_offset)
+			elif current_chunk_type != Chunk_Type.Tranistions:
+				is_transitioning = true
+				_choose_current_scene()
+				is_scoring = false
+				End_Of_Chunk.emit()
+				print("chunk clear")
+				Add_Chunk_Clear_Score.emit()
+				Is_Scoring.emit()
+				new_chunks_spawn = true
+				_instantiate_chunks()
+				var fog_offset = -150 if current_chunk_type == Chunk_Type.Mountains else -250
+				Fog_Activation.emit(false, speed, fog_offset)
 
 
 func _on_chunk_timer_timeout():
 	chunk_timer.stop()
-	is_transitioning = true
+	new_chunks_spawn = false
 	var fog_offset = -150 if current_chunk_type == Chunk_Type.Mountains else -250
 	fog_timer.start()
 	Fog_Activation.emit(true, speed, fog_offset)
 
 func _on_fog_timer_timeout():
+	new_chunks_spawn = false
 	fog_timer.stop()
-	is_transitioning = false
-	_choose_current_scene()
-	var fog_offset = -150 if current_chunk_type == Chunk_Type.Mountains else -250
-	Fog_Activation.emit(false, speed, fog_offset)
-	chunk_timer.start()
-	is_scoring = true
-	Is_Scoring.emit()
-	_instantiate_chunks()
-
+	var fog_offset = -130 
+	Fog_Activation.emit(true, speed, fog_offset)
 
 func _on_main_game_over():
 	player_dead = true

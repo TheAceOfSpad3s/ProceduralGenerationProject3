@@ -6,7 +6,7 @@ extends CharacterBody3D
 @export var roll_speed := 20.0
 @export var bank_rotation_speed := 5.0
 enum State {DEFUALT, ROLLING, DEAD}
-enum CameraState {Mountain, Ravine}
+enum CameraState {Mountain, Ravine, Transition}
 signal Player_Dead
 signal CurrentHeight
 signal AddScore
@@ -26,7 +26,10 @@ const BANK_AMOUNT = PI/8.0
 var roll_x_direction = 0.0
 var angular_velocity: float = 0.0
 var can_graze = true
-
+var lerp_speed = 0.0
+var target_fov = 0.0
+var target_positon_camera = Vector3(0,0,0)
+var target_rotation_camera = Vector3(0,0,0)
 func _physics_process(delta: float) -> void:
 	if currentState == State.DEAD:
 		camera_controller.position  = lerp(camera_controller.position,position - death_camera.position, 0.05)
@@ -73,17 +76,26 @@ func _physics_process(delta: float) -> void:
 			# If we collide with something, change the state to DEAD
 			Player_Dead.emit()
 			print("Collision detected!")
-	
-		
-	#Match Camera Controller Match the positon of myself
-	var lerp_speed = 0.25 if currentCameraState == CameraState.Mountain else 0.5
-	camera_controller.position  = lerp(camera_controller.position,position,lerp_speed)
 	#Changing Settings of Camera based on Chunk Type
-	var target_fov = 100.0 if currentCameraState == CameraState.Mountain else 65.0
+	if currentCameraState == CameraState.Mountain:
+		lerp_speed = 0.25
+		target_fov = 100.0
+		target_positon_camera = Vector3(0,0.784,1.635)
+		target_rotation_camera = Vector3(deg_to_rad(22.9),-PI,0)
+	elif currentCameraState == CameraState.Ravine:
+		lerp_speed = 0.5
+		target_fov = 65.0
+		target_positon_camera = Vector3(0,0.418,1.56)
+		target_rotation_camera = Vector3(deg_to_rad(10),-PI,0)
+	elif currentCameraState == CameraState.Transition:
+		lerp_speed = 0.25
+		target_fov = 160.0
+		target_positon_camera = Vector3(0,0.784,1.635)
+		target_rotation_camera = Vector3(deg_to_rad(22.9),-PI,0)
+	#Match Camera Controller Match the positon of myself
+	camera_controller.position  = lerp(camera_controller.position,position,lerp_speed)
 	camera.fov = lerp(camera.fov, target_fov, delta * 3.0)
-	var target_positon_camera = Vector3(0,0.784,1.635) if currentCameraState == CameraState.Mountain else Vector3(0,0.418,1.56)
 	camera_target.position = lerp(camera_target.position,target_positon_camera, delta*3.0)
-	var target_rotation_camera = Vector3(deg_to_rad(22.9),-PI,0) if currentCameraState == CameraState.Mountain else Vector3(deg_to_rad(10),-PI,0)
 	camera_target.rotation = lerp(camera_target.rotation, target_rotation_camera, delta*3.0)
 	CurrentHeight.emit(position.y)
 
@@ -99,6 +111,8 @@ func _on_chunk_manager_chunk_type(chunk_type):
 		currentCameraState = CameraState.Mountain
 	elif  chunk_type == 1:
 		currentCameraState = CameraState.Ravine
+	else: 
+		currentCameraState = CameraState.Transition
 
 
 

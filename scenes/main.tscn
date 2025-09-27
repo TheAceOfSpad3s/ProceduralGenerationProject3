@@ -105,7 +105,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -130)
 size = Vector3(100, 100, 2)
 
 [node name="FogVolumeFront" type="FogVolume" parent="Environment/Fog"]
-size = Vector3(100, 100, 10)
+size = Vector3(100, 100, 7)
 material = SubResource("FogMaterial_4bcnk")
 script = ExtResource("6_oa1j7")
 

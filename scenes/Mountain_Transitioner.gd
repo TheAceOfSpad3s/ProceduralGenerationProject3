@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var mountain_width := 300.0
+@export var mountain_width := 100.0
 @export var mountain_length := 10.0
 @export var subdivisions_x := 40
 @export var subdivisions_z := 5
@@ -12,7 +12,7 @@ extends Node3D
 var noise: FastNoiseLite = null
 var transition_id: int = 0
 var shader: ShaderMaterial = preload("res://Shaders/TerrainShader.tres")
-@onready var timer = $Mountain_Timer
+@onready var timer = $Transition_Timer
 var height_inc = false
 
 func set_noise_reference(shared_noise: FastNoiseLite) -> void:

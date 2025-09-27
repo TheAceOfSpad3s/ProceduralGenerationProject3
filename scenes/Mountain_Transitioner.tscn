@@ -19,3 +19,6 @@ mesh = SubResource("ArrayMesh_ox1lj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("ConvexPolygonShape3D_4igmn")
+
+[node name="Transition_Timer" type="Timer" parent="."]
+wait_time = 10.0
