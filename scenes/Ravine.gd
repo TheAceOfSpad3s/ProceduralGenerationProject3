@@ -4,11 +4,13 @@ extends Node3D
 @export_range(10.0, 100.0, 5.0, "step") var ravine_length := 50.0
 @export_range(10, 100, 1, "step") var subdivisions_x := 20
 @export_range(10, 100, 1, "step") var subdivisions_z := 25
-@export_range(1.0, 50.0, 1.0, "step") var ravine_depth := 30.0
+@export_range(1.0, 50.0, 1.0, "step") var ravine_depth := 5.0
+@export_range(1.0, 50.0, 1.0, "step") var max_ravine_depth := 30.0
+@export_range(1.0, 50.0, 1.0, "step") var min_ravine_depth := 5.0
 @export_range(0.01, 0.5, 0.01, "step") var ravine_frequency := 0.1
 @export_range(0.0, 50.0, 1.0, "step") var side_height := 10.0
 @export_range(10.0, 100.0, 1.0, "step") var divot_width := 30.0 # The width of the divot at the top
-@export_range(0.0, 50.0, 1.0, "step") var ravine_padding := 30.0 # Wiggle room on either side of the ravine
+@export_range(0.0, 50.0, 1.0, "step") var ravine_padding := 40.0 # Wiggle room on either side of the ravine
 @export_range(0.0, 1.0, 0.05, "step") var base_flatness := 0.5
 @export_range(0.0, 5.0, 0.1, "step") var rock_noise_strength := 4.0 # strength of the rock protrusions
 @export_range(0.01, 1.0, 0.01, "step") var rock_noise_frequency := 1 # frequency of the rock protrusions
@@ -31,7 +33,7 @@ var rock_material = preload("res://Shaders/RockMaterial.material")
 
 # The total width of the chunk will now be dynamically calculated.
 var ravine_width: float = 0.0
-
+var depth_inc = false
 var ravine_noise: FastNoiseLite = null
 var ravine_id: int = 0
 var shader: ShaderMaterial = preload("res://Shaders/Ravine.tres")
@@ -48,6 +50,7 @@ func generate_mesh(world_z_offset: float) -> void:
 		push_error("Ravine.generate_mesh: ravine_noise is null.")
 		return
 	
+
 	# Dynamically calculate the total width of the generated terrain.
 	ravine_width = divot_width + (2.0 * ravine_padding)
 	
@@ -267,5 +270,22 @@ func scatter_rocks():
 			multi_mesh.set_instance_transform(rocks_placed_count, new_transform)
 			rocks_placed_count += 1
 
+func _physics_process(_delta):
+	if depth_inc:
+		if ravine_depth <= max_ravine_depth and ravine_depth>= min_ravine_depth:
+			#ravine_depth = ravine_depth + 0.03
+			var height_speed = 0.04 if ravine_depth <10 else 0.004
+			ravine_depth = lerp(ravine_depth, max_ravine_depth,height_speed)
+
+
+
 	
 	
+
+
+func _on_ravine_timer_timeout():
+	depth_inc = false
+
+
+func _on_ravine_inc_timer_timeout():
+	depth_inc = true

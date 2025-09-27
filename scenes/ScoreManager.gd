@@ -7,9 +7,9 @@ var score : float = 0.0
 var player_current_height : float = 0.0
 
 var safe_height: float = 7.0
-var height_score_multiplier: float = 10.0
+var height_score_multiplier: float = 5.0
 var graze_bonus : float = 1000.0
-var chunk_clear_bonus: float = 5000.0
+var chunk_clear_bonus: float = 2000.0
 
 
 func _on_player_current_height(current_height):

@@ -1,16 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://cyc4q8otb424y"]
+[gd_scene load_steps=5 format=3 uid="uid://cyc4q8otb424y"]
 
 [ext_resource type="Script" path="res://scenes/ChunkManager.gd" id="1_5d75o"]
-[ext_resource type="PackedScene" uid="uid://bswt8c4k8b3wn" path="res://scenes/Ravine.tscn" id="2_1frmg"]
+[ext_resource type="PackedScene" uid="uid://bswt8c4k8b3wn" path="res://scenes/ravine.tscn" id="2_1frmg"]
 [ext_resource type="PackedScene" uid="uid://8mrquvwvbfmb" path="res://scenes/Mountain.tscn" id="3_0q8qu"]
+[ext_resource type="PackedScene" uid="uid://dq1pb76b6673" path="res://scenes/Mountain_Transitioner.tscn" id="4_f3b6i"]
 
 [node name="ChunkManager" type="Node3D"]
 script = ExtResource("1_5d75o")
 ravine_scenes = Array[PackedScene]([ExtResource("2_1frmg")])
 mountain_scenes = Array[PackedScene]([ExtResource("3_0q8qu")])
+transition_scenes = Array[PackedScene]([ExtResource("4_f3b6i")])
 
 [node name="ChunkTimer" type="Timer" parent="."]
-wait_time = 15.0
+wait_time = 10.0
 autostart = true
 
 [node name="FogTimer" type="Timer" parent="."]

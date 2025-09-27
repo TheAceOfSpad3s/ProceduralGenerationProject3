@@ -2,9 +2,9 @@
 extends Node3D
 
 # Common
-@export var num_chunks := 5
+@export var num_chunks := 15
 @export var speed := 40.0 # world moves toward player (units/sec)
-@export var initial_spawn_offset := -100.0 # New variable to control how far back chunks spawn
+@export var initial_spawn_offset := 0.0 # New variable to control how far back chunks spawn
 
 @onready var fog_timer = $FogTimer
 @onready var chunk_timer = $ChunkTimer
@@ -12,12 +12,15 @@ extends Node3D
 signal chunk_type
 signal Is_Scoring()
 signal Add_Chunk_Clear_Score()
+signal End_Of_Chunk()
+signal Fog_Activation(is_showing: bool, fog_speed: float, fog_offset: float)
 var is_scoring = true
 var time_until_next_recycle: float = 0.0
 var recycle_threshold: float = 0.0
 var is_transitioning: bool = false
 var normal_fog_depth: float = 0.0
 var player_dead = false
+
 # Ravine
 @export var ravine_scenes: Array[PackedScene] = []
 @export var ravine_frequency: float = 0.05
@@ -31,11 +34,19 @@ var ravine_noise := FastNoiseLite.new()
 @export var mountain_scenes: Array[PackedScene] = []
 @export var mountain_frequency: float = 0.1
 @export var mountain_noise_fractal_octaves: int = 4
-@export var mountain_length := 50.0
+@export var mountain_length := 10.0
 var mountains: Array = []
 var next_mountain_id: int = 0
 var mountain_noise := FastNoiseLite.new()
 
+@export var transition_scenes: Array[PackedScene] = []
+@export var transition_frequency: float = 0.1
+@export var transition_noise_fractal_octaves: int = 4
+@export var transition_length := 10.0
+var transitions: Array = []
+var next_transition_id: int = 0
+var transition_noise := FastNoiseLite.new()
+var transition_scene_index: int = 1
 # New: A single variable to hold the currently selected scene
 var current_scene: PackedScene
 
@@ -44,13 +55,13 @@ var active_chunks: Array = []
 var last_chunk_position_z: float = 0.0
 var next_id: int = 0
 
-enum Chunk_Type {Mountains, Ravines}
+enum Chunk_Type {Mountains, Ravines, Tranistions}
 var current_chunk_type: Chunk_Type = Chunk_Type.Mountains
 
 func _ready() -> void:
 	assert(not ravine_scenes.is_empty(), "Add at least one Ravine.tscn to ravine_scenes.")
 	assert(not mountain_scenes.is_empty(), "Add at least one Mountain.tscn to mountain_scenes.")
-	
+	assert(not transition_scenes.is_empty(), "Add at least one .tscn to mountain_scenes.")	
 	# Store the initial fog depth so we can return to it after the transition
 	
 	# Initialize the noise, but don't set the seed yet, that happens in _choose_current_scene
@@ -61,7 +72,11 @@ func _ready() -> void:
 	mountain_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	mountain_noise.frequency = mountain_frequency
 	mountain_noise.fractal_octaves = mountain_noise_fractal_octaves
-	
+
+	transition_noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
+	transition_noise.frequency = transition_frequency
+	transition_noise.fractal_octaves = transition_noise_fractal_octaves
+		
 	# Initial setup of chunks
 	_choose_current_scene()
 	_instantiate_chunks()
@@ -71,21 +86,27 @@ func _ready() -> void:
 
 # New: Chooses the next scene and sets up the active_chunks array
 func _choose_current_scene():
-	var use_mountains = randi() % 2 == 0
-	
-	if use_mountains:
-		current_chunk_type = Chunk_Type.Mountains
-		var random_index = randi() % mountain_scenes.size()
-		current_scene = mountain_scenes[random_index]
-		# Re-seed the noise generator for a new pattern
-		mountain_noise.seed = randi()
-	else:
-		current_chunk_type = Chunk_Type.Ravines
-		var random_index = randi() % ravine_scenes.size()
-		current_scene = ravine_scenes[random_index]
-		# Re-seed the noise generator for a new pattern
-		ravine_noise.seed = randi()
-
+	if not is_transitioning:
+		var use_mountains = 2 % 2 == 0
+		
+		if use_mountains:
+			current_chunk_type = Chunk_Type.Mountains
+			num_chunks = 15
+			var random_index = randi() % mountain_scenes.size()
+			current_scene = mountain_scenes[random_index]
+			# Re-seed the noise generator for a new pattern
+			mountain_noise.seed = randi()
+		else:
+			num_chunks = 5
+			current_chunk_type = Chunk_Type.Ravines
+			var random_index = randi() % ravine_scenes.size()
+			current_scene = ravine_scenes[random_index]
+			# Re-seed the noise generator for a new pattern
+			ravine_noise.seed = randi()
+	elif is_transitioning:
+		current_chunk_type = Chunk_Type.Tranistions
+		num_chunks = 15
+		current_scene = transition_scenes[0]
 	# Reset the chunk spawn position and ID, and apply the initial offset
 	last_chunk_position_z = initial_spawn_offset
 	next_id = 0
@@ -110,11 +131,14 @@ func _spawn_next_chunk():
 		noise_ref = mountain_noise
 		y_pos = -10.0
 		
-	else:
+	elif current_chunk_type == Chunk_Type.Ravines:
 		chunk_length = ravine_length
 		noise_ref = ravine_noise
-		y_pos = 10.0
-	
+		y_pos = 0.0
+	elif current_chunk_type == Chunk_Type.Tranistions:
+		chunk_length = transition_length
+		noise_ref = transition_noise
+		y_pos = -10.0
 	new_chunk.set_noise_reference(noise_ref)
 	new_chunk.position = Vector3(0, y_pos, last_chunk_position_z - chunk_length)
 	
@@ -122,10 +146,12 @@ func _spawn_next_chunk():
 	if current_chunk_type == Chunk_Type.Mountains:
 		new_chunk.mountain_id = next_id
 		new_chunk.generate_mesh(-new_chunk.mountain_id * mountain_length)
-	else:
+	elif current_chunk_type == Chunk_Type.Ravines:
 		new_chunk.ravine_id = next_id
 		new_chunk.generate_mesh(-new_chunk.ravine_id * ravine_length)
-	
+	elif current_chunk_type == Chunk_Type.Tranistions:
+		new_chunk.transition_id = next_id
+		new_chunk.generate_mesh(-new_chunk.transition_id * transition_length)
 	active_chunks.append(new_chunk)
 	last_chunk_position_z = new_chunk.position.z
 	next_id += 1
@@ -138,42 +164,46 @@ func _process(delta: float) -> void:
 	# Move all active chunks regardless of type
 	for chunk in active_chunks:
 		chunk.position.z += speed * delta
-	if not is_transitioning:
-		# Recycle logic is now unified
-		if active_chunks.size() > 0:
-			var first_chunk = active_chunks[0]
-			var chunk_length = mountain_length if current_chunk_type == Chunk_Type.Mountains else ravine_length
+
+	# Recycle logic is now unified
+	if active_chunks.size() > 0:
+		var first_chunk = active_chunks[0]
+		var chunk_length = mountain_length if current_chunk_type == Chunk_Type.Mountains else ravine_length
+		
+		if first_chunk.position.z >= chunk_length:
+			# Recycle the chunk
+			var recycled_chunk = active_chunks.pop_front()
+			var last_chunk = active_chunks.back()
 			
-			if first_chunk.position.z >= chunk_length:
-				# Recycle the chunk
-				var recycled_chunk = active_chunks.pop_front()
-				var last_chunk = active_chunks.back()
-				
-				var y_pos = 0.0
-				var noise_ref = null
-				if current_chunk_type == Chunk_Type.Mountains:
-					y_pos = -10.0
-					noise_ref = mountain_noise
-				else:
-					y_pos = 10.0
-					noise_ref = ravine_noise
-				
-				recycled_chunk.position = Vector3(0, y_pos, last_chunk.position.z - chunk_length)
-				recycled_chunk.set_noise_reference(noise_ref)
-				
-				if current_chunk_type == Chunk_Type.Mountains:
-					recycled_chunk.mountain_id = next_id
-					recycled_chunk.generate_mesh(-recycled_chunk.mountain_id * mountain_length)
-				else:
-					recycled_chunk.ravine_id = next_id
-					recycled_chunk.generate_mesh(-recycled_chunk.ravine_id * ravine_length)
-					
-				next_id += 1
-				active_chunks.append(recycled_chunk)
-				
-				# Call _choose_current_scene() when you want to switch
-				# You can connect a timer to this function to handle the switching
-	else:
+			var y_pos = 0.0
+			var noise_ref = null
+			if current_chunk_type == Chunk_Type.Mountains:
+				y_pos = -10.0
+				noise_ref = mountain_noise
+			elif current_chunk_type == Chunk_Type.Ravines:
+				y_pos = 0.0
+				noise_ref = ravine_noise
+			elif current_chunk_type == Chunk_Type.Tranistions:
+				y_pos = -10.0
+				noise_ref = transition_noise
+			recycled_chunk.position = Vector3(0, y_pos, last_chunk.position.z - chunk_length)
+			recycled_chunk.set_noise_reference(noise_ref)
+			
+			if current_chunk_type == Chunk_Type.Mountains:
+				recycled_chunk.mountain_id = next_id
+				recycled_chunk.generate_mesh(-recycled_chunk.mountain_id * mountain_length)
+			elif current_chunk_type == Chunk_Type.Ravines:
+				recycled_chunk.ravine_id = next_id
+				recycled_chunk.generate_mesh(-recycled_chunk.ravine_id * ravine_length)
+			elif current_chunk_type == Chunk_Type.Tranistions:
+				recycled_chunk.transition_id = next_id
+				recycled_chunk.generate_mesh(-recycled_chunk.transition_id * transition_length)
+			next_id += 1
+			active_chunks.append(recycled_chunk)
+			
+			# Call _choose_current_scene() when you want to switch
+			# You can connect a timer to this function to handle the switching
+	if is_transitioning:
 		if active_chunks.size() > 0:
 			var first_chunk = active_chunks[0]
 			var chunk_length = mountain_length if current_chunk_type == Chunk_Type.Mountains else ravine_length
@@ -181,21 +211,28 @@ func _process(delta: float) -> void:
 				first_chunk.queue_free()
 				active_chunks.pop_front()
 		if active_chunks.size() == 0 and is_scoring:
-			print("chunk clear")
+			_choose_current_scene()
 			is_scoring = false
+			End_Of_Chunk.emit()
+			print("chunk clear")
 			Add_Chunk_Clear_Score.emit()
 			Is_Scoring.emit()
-
+			_instantiate_chunks()
 
 
 func _on_chunk_timer_timeout():
 	chunk_timer.stop()
 	is_transitioning = true
+	var fog_offset = -150 if current_chunk_type == Chunk_Type.Mountains else -250
 	fog_timer.start()
+	Fog_Activation.emit(true, speed, fog_offset)
+
 func _on_fog_timer_timeout():
 	fog_timer.stop()
-	_choose_current_scene()
 	is_transitioning = false
+	_choose_current_scene()
+	var fog_offset = -150 if current_chunk_type == Chunk_Type.Mountains else -250
+	Fog_Activation.emit(false, speed, fog_offset)
 	chunk_timer.start()
 	is_scoring = true
 	Is_Scoring.emit()

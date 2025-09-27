@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://dq1pb76b6673"]
+
+[ext_resource type="Script" path="res://scenes/Mountain_Transitioner.gd" id="1_k7644"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ox1lj"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_4igmn"]
+
+[node name="Mountain_Transitioner" type="RigidBody3D"]
+collision_layer = 2
+mass = 0.01
+gravity_scale = 0.0
+freeze_mode = 1
+script = ExtResource("1_k7644")
+
+[node name="Terrain" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.410656, -0.1754, 0.680084)
+mesh = SubResource("ArrayMesh_ox1lj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_4igmn")

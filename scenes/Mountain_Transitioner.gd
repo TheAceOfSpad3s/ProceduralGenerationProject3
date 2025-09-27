@@ -1,16 +1,16 @@
 extends Node3D
 
-@export var mountain_width := 100.0
+@export var mountain_width := 300.0
 @export var mountain_length := 10.0
 @export var subdivisions_x := 40
 @export var subdivisions_z := 5
 @export var height_scale : float = 5.0
-@export var min_height_scale: float = 1.0
-@export var max_height_scale: float = 20.0
-@export var noise_scale := 0.24
+@export var min_height_scale: float = 5.0
+@export var max_height_scale: float = 5.0
+@export var noise_scale := 0.1
 
 var noise: FastNoiseLite = null
-var mountain_id: int = 0
+var transition_id: int = 0
 var shader: ShaderMaterial = preload("res://Shaders/TerrainShader.tres")
 @onready var timer = $Mountain_Timer
 var height_inc = false
@@ -77,21 +77,3 @@ func generate_mesh(world_z_offset: float) -> void:
 
 	# Step 6: Apply the material for shading
 	$Terrain.material_override = shader
-
-func _physics_process(_delta):
-	if height_inc:
-		if height_scale <= max_height_scale and height_scale>= min_height_scale:
-			#height_scale = height_scale + 0.03
-			var height_speed = 0.004 if height_scale <10 else 0.004
-			height_scale = lerp(height_scale, max_height_scale,height_speed)
-	elif not height_inc:
-		var height_speed = 0.002 if height_scale <10 else 0.004
-		height_scale = lerp(height_scale, min_height_scale, height_speed)
-
-
-func _on_mountain_timer_timeout():
-	height_inc = false
-
-
-func _on_mountain_inc_timer_timeout():
-	height_inc = true

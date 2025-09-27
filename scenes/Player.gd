@@ -22,7 +22,7 @@ var camerafov = 110.0 if currentCameraState == CameraState.Mountain else 60.0
 @onready var death_camera = $CameraController/CameraTarget/DeathCamera
 @onready var graze_cooldown =$Graze/GrazeCooldown
 # Consts
-const BANK_AMOUNT = PI/10.0
+const BANK_AMOUNT = PI/8.0
 var roll_x_direction = 0.0
 var angular_velocity: float = 0.0
 var can_graze = true
@@ -116,3 +116,7 @@ func _on_area_3d_body_entered(_body):
 
 func _on_graze_cooldown_timeout():
 	can_graze = true
+
+
+func _on_chunk_manager_end_of_chunk():
+	position.y = 5
