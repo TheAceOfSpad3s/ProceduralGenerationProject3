@@ -12,7 +12,6 @@ func _physics_process(delta):
 		position.z += FogSpeed * delta
 
 
-
 func _on_chunk_manager_fog_activation(is_showing, fog_speed, fog_offset):
 	position.z = fog_offset
 

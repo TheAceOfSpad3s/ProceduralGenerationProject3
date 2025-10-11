@@ -1,13 +1,13 @@
 extends Node3D
 
-@export var mountain_width := 100.0
+@export var mountain_width := 1000.0
 @export var mountain_length := 10.0
-@export var subdivisions_x := 40
+@export var subdivisions_x := 20
 @export var subdivisions_z := 5
 @export var height_scale : float = 5.0
 @export var min_height_scale: float = 5.0
-@export var max_height_scale: float = 5.0
-@export var noise_scale := 0.1
+@export var max_height_scale: float = 10.0
+@export var noise_scale := 0.15
 
 var noise: FastNoiseLite = null
 var transition_id: int = 0

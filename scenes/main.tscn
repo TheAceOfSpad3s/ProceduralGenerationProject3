@@ -1,16 +1,19 @@
-[gd_scene load_steps=13 format=3 uid="uid://27b0ftbl3gd3"]
+[gd_scene load_steps=14 format=3 uid="uid://27b0ftbl3gd3"]
 
 [ext_resource type="PackedScene" uid="uid://j7eb2cgdfiyg" path="res://scenes/Player.tscn" id="1_lx46h"]
 [ext_resource type="Script" path="res://scenes/GameManager.gd" id="1_vh5m1"]
 [ext_resource type="PackedScene" uid="uid://cyc4q8otb424y" path="res://scenes/ChunkManager.tscn" id="2_sfjf3"]
 [ext_resource type="Script" path="res://scenes/UiManager.gd" id="4_extio"]
 [ext_resource type="Script" path="res://scenes/ScoreManager.gd" id="4_on7fe"]
+[ext_resource type="Script" path="res://scenes/Environment.gd" id="6_goaic"]
 [ext_resource type="Script" path="res://scenes/FogScript.gd" id="6_oa1j7"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h5fu3"]
-sky_top_color = Color(3.85046e-07, 0.500865, 0.600973, 1)
-sky_horizon_color = Color(0.55, 0.667466, 0.683493, 1)
-ground_horizon_color = Color(0.55, 0.667466, 0.683493, 1)
+sky_top_color = Color(0.0352941, 0.054902, 0.0784314, 1)
+sky_horizon_color = Color(0.00392157, 0, 0.286275, 1)
+sky_curve = 0.106066
+ground_bottom_color = Color(0.0352941, 0.054902, 0.0784314, 1)
+ground_horizon_color = Color(0.00392157, 0, 0.286275, 1)
 
 [sub_resource type="Sky" id="Sky_5u6oq"]
 sky_material = SubResource("ProceduralSkyMaterial_h5fu3")
@@ -75,45 +78,58 @@ wait_time = 0.1
 autostart = true
 
 [node name="Environment" type="Node3D" parent="."]
+script = ExtResource("6_goaic")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = SubResource("Environment_xe6ps")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
-transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+[node name="Sun" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(-0.866026, 1.63133e-07, -0.5, -8.74228e-08, -0.999999, -1.74845e-07, -0.5, -1.07709e-07, 0.866025, 0, 0, 0)
 shadow_enabled = true
+sky_mode = 2
 
 [node name="Fog" type="Node3D" parent="Environment"]
+visible = false
 
 [node name="FogVolumeRight" type="FogVolume" parent="Environment/Fog"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -60)
+visible = false
 size = Vector3(2, 100, 150)
 material = SubResource("FogMaterial_qhdlv")
 
 [node name="FogVolumeLeft" type="FogVolume" parent="Environment/Fog"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -60)
+visible = false
 size = Vector3(2, 100, 150)
 material = SubResource("FogMaterial_qhdlv")
 
 [node name="FogVolumeFront(Fixed)" type="FogVolume" parent="Environment/Fog"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100)
+visible = false
 size = Vector3(100, 100, 2)
 material = SubResource("FogMaterial_65f88")
 
 [node name="FogVolumeFront(Fixed)2" type="FogVolume" parent="Environment/Fog"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -130)
+visible = false
 size = Vector3(100, 100, 2)
 
 [node name="FogVolumeFront" type="FogVolume" parent="Environment/Fog"]
-size = Vector3(100, 100, 7)
+visible = false
+size = Vector3(1000, 100, 7)
 material = SubResource("FogMaterial_4bcnk")
 script = ExtResource("6_oa1j7")
 
 [node name="FogVolumeBack" type="FogVolume" parent="Environment/Fog"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
+visible = false
 size = Vector3(100, 100, 2)
 
 [node name="Walls" type="Node3D" parent="Environment"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 10, 0)
+sky_mode = 1
 
 [connection signal="GameOver" from="." to="Player" method="_on_main_game_over"]
 [connection signal="GameOver" from="." to="ChunkManager" method="_on_main_game_over"]
@@ -122,9 +138,11 @@ size = Vector3(100, 100, 2)
 [connection signal="CurrentHeight" from="Player" to="ScoreManager" method="_on_player_current_height"]
 [connection signal="Player_Dead" from="Player" to="." method="_on_player_player_dead"]
 [connection signal="Add_Chunk_Clear_Score" from="ChunkManager" to="ScoreManager" method="_on_chunk_manager_add_chunk_clear_score"]
+[connection signal="Day_Night_Cycle" from="ChunkManager" to="Environment" method="_on_chunk_manager_day_night_cycle"]
 [connection signal="End_Of_Chunk" from="ChunkManager" to="Player" method="_on_chunk_manager_end_of_chunk"]
 [connection signal="Fog_Activation" from="ChunkManager" to="Environment/Fog/FogVolumeFront" method="_on_chunk_manager_fog_activation"]
 [connection signal="Is_Scoring" from="ChunkManager" to="ScoreManager" method="_on_chunk_manager_is_scoring"]
 [connection signal="chunk_type" from="ChunkManager" to="Player" method="_on_chunk_manager_chunk_type"]
+[connection signal="chunk_type" from="ChunkManager" to="Environment" method="_on_chunk_manager_chunk_type"]
 [connection signal="ScoreUpdated" from="ScoreManager" to="UiManager" method="_on_score_manager_score_updated"]
 [connection signal="timeout" from="ScoreManager/ScoreTimer" to="ScoreManager" method="_on_score_timer_timeout"]

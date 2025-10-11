@@ -22,7 +22,7 @@ var camerafov = 110.0 if currentCameraState == CameraState.Mountain else 60.0
 @onready var death_camera = $CameraController/CameraTarget/DeathCamera
 @onready var graze_cooldown =$Graze/GrazeCooldown
 # Consts
-const BANK_AMOUNT = PI/8.0
+var BANK_AMOUNT = PI/7.0
 var roll_x_direction = 0.0
 var angular_velocity: float = 0.0
 var can_graze = true
@@ -90,7 +90,7 @@ func _physics_process(delta: float) -> void:
 	elif currentCameraState == CameraState.Transition:
 		lerp_speed = 0.25
 		target_fov = 160.0
-		target_positon_camera = Vector3(0,0.784,1.635)
+		target_positon_camera = Vector3(0,0.784,1.235)
 		target_rotation_camera = Vector3(deg_to_rad(22.9),-PI,0)
 	#Match Camera Controller Match the positon of myself
 	camera_controller.position  = lerp(camera_controller.position,position,lerp_speed)
@@ -109,10 +109,13 @@ func _on_roll_timer_timeout():
 func _on_chunk_manager_chunk_type(chunk_type):
 	if chunk_type == 0:
 		currentCameraState = CameraState.Mountain
+		BANK_AMOUNT = PI/7.0
 	elif  chunk_type == 1:
 		currentCameraState = CameraState.Ravine
+		BANK_AMOUNT = PI/5.0
 	else: 
 		currentCameraState = CameraState.Transition
+		BANK_AMOUNT = PI/8.0
 
 
 

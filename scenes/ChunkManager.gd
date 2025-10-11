@@ -2,13 +2,13 @@
 extends Node3D
 
 # Common
-@export var num_chunks := 15
+@export var num_chunks := 10
 @export var speed := 40.0 # world moves toward player (units/sec)
-@export var initial_spawn_offset := 0.0 # New variable to control how far back chunks spawn
+@export var initial_spawn_offset := 10.0 # New variable to control how far back chunks spawn
 
 @onready var fog_timer = $FogTimer
 @onready var chunk_timer = $ChunkTimer
-
+signal Day_Night_Cycle()
 signal chunk_type
 signal Is_Scoring()
 signal Add_Chunk_Clear_Score()
@@ -164,6 +164,7 @@ func _process(delta: float) -> void:
 	# Move all active chunks regardless of type
 	for chunk in active_chunks:
 		chunk.position.z += speed * delta
+		pass
 	if new_chunks_spawn:
 	# Recycle logic is now unified
 		if active_chunks.size() > 0:
@@ -244,19 +245,18 @@ func _process(delta: float) -> void:
 				_instantiate_chunks()
 				var fog_offset = -150 if current_chunk_type == Chunk_Type.Mountains else -250
 				Fog_Activation.emit(false, speed, fog_offset)
-
+				Day_Night_Cycle.emit()
 
 func _on_chunk_timer_timeout():
 	chunk_timer.stop()
 	new_chunks_spawn = false
-	var fog_offset = -150 if current_chunk_type == Chunk_Type.Mountains else -250
+	var fog_offset = -200 if current_chunk_type == Chunk_Type.Mountains else -250
 	fog_timer.start()
 	Fog_Activation.emit(true, speed, fog_offset)
-
 func _on_fog_timer_timeout():
 	new_chunks_spawn = false
 	fog_timer.stop()
-	var fog_offset = -130 
+	var fog_offset = -200 
 	Fog_Activation.emit(true, speed, fog_offset)
 
 func _on_main_game_over():

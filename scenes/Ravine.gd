@@ -10,7 +10,7 @@ extends Node3D
 @export_range(0.01, 0.5, 0.01, "step") var ravine_frequency := 0.1
 @export_range(0.0, 50.0, 1.0, "step") var side_height := 10.0
 @export_range(10.0, 100.0, 1.0, "step") var divot_width := 30.0 # The width of the divot at the top
-@export_range(0.0, 50.0, 1.0, "step") var ravine_padding := 40.0 # Wiggle room on either side of the ravine
+@export_range(0.0, 50.0, 1.0, "step") var ravine_padding := 50.0 # Wiggle room on either side of the ravine
 @export_range(0.0, 1.0, 0.05, "step") var base_flatness := 0.5
 @export_range(0.0, 5.0, 0.1, "step") var rock_noise_strength := 4.0 # strength of the rock protrusions
 @export_range(0.01, 1.0, 0.01, "step") var rock_noise_frequency := 1 # frequency of the rock protrusions
@@ -40,7 +40,6 @@ var shader: ShaderMaterial = preload("res://Shaders/Ravine.tres")
 
 # Use _ready() to make sure the rocks are scattered when the game starts
 func _ready():
-	#call_deferred("scatter_rocks")
 	pass
 func set_noise_reference(shared_ravine_noise: FastNoiseLite) -> void:
 	ravine_noise = shared_ravine_noise
@@ -167,7 +166,8 @@ func generate_mesh(world_z_offset: float) -> void:
 	
 	# Step 6: Apply the material for shading
 	$Terrain.material_override = shader
-
+	if depth_inc:
+		call_deferred("scatter_rocks")
 # A helper function to find the first MeshInstance3D in a scene
 # This is needed because the rock scenes are .glb files which may have other nodes
 # like an inherited Node3D or a Camera, etc.
@@ -184,6 +184,15 @@ func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
 			return found_mesh
 	
 	return null
+
+
+
+func _physics_process(_delta):
+	if depth_inc:
+		if ravine_depth <= max_ravine_depth and ravine_depth>= min_ravine_depth:
+			#ravine_depth = ravine_depth + 0.03
+			var height_speed = 0.04 if ravine_depth <10 else 0.004
+			ravine_depth = lerp(ravine_depth, max_ravine_depth,height_speed)
 
 func scatter_rocks():
 	if rock_scenes.is_empty():
@@ -258,8 +267,7 @@ func scatter_rocks():
 			var scale_vec = Vector3.ONE * random_scale * normalization_factor
 			
 			# Embed rock at a fixed depth, as requested.
-			var embedded_y = -ravine_depth
-			
+			var embedded_y = -ravine_depth 
 			# Rotation around Y
 			var new_rotation = Basis(Vector3.UP, rng.randf_range(0, TAU))
 			
@@ -269,15 +277,6 @@ func scatter_rocks():
 			# Apply to multimesh
 			multi_mesh.set_instance_transform(rocks_placed_count, new_transform)
 			rocks_placed_count += 1
-
-func _physics_process(_delta):
-	if depth_inc:
-		if ravine_depth <= max_ravine_depth and ravine_depth>= min_ravine_depth:
-			#ravine_depth = ravine_depth + 0.03
-			var height_speed = 0.04 if ravine_depth <10 else 0.004
-			ravine_depth = lerp(ravine_depth, max_ravine_depth,height_speed)
-
-
 
 	
 	
