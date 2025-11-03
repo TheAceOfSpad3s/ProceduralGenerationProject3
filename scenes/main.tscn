@@ -1,12 +1,56 @@
-[gd_scene load_steps=14 format=3 uid="uid://27b0ftbl3gd3"]
+[gd_scene load_steps=37 format=3 uid="uid://27b0ftbl3gd3"]
 
 [ext_resource type="PackedScene" uid="uid://j7eb2cgdfiyg" path="res://scenes/Player.tscn" id="1_lx46h"]
 [ext_resource type="Script" path="res://scenes/GameManager.gd" id="1_vh5m1"]
 [ext_resource type="PackedScene" uid="uid://cyc4q8otb424y" path="res://scenes/ChunkManager.tscn" id="2_sfjf3"]
 [ext_resource type="Script" path="res://scenes/UiManager.gd" id="4_extio"]
 [ext_resource type="Script" path="res://scenes/ScoreManager.gd" id="4_on7fe"]
+[ext_resource type="FontFile" uid="uid://0f58wm37x6gj" path="res://Game Logo/airstrike.ttf" id="5_a4p27"]
 [ext_resource type="Script" path="res://scenes/Environment.gd" id="6_goaic"]
+[ext_resource type="Theme" uid="uid://dnvv3hxe84cqr" path="res://Materials/Menu_Theme.tres" id="6_lv0ft"]
 [ext_resource type="Script" path="res://scenes/FogScript.gd" id="6_oa1j7"]
+[ext_resource type="Texture2D" uid="uid://do5flapghgiyi" path="res://Game Logo/Gemini_Generated_Image_sxv4vosxv4vosxv4-Photoroom.png" id="7_i8ai6"]
+[ext_resource type="Script" path="res://scenes/AudioControl.gd" id="8_ptqgx"]
+[ext_resource type="Script" path="res://scenes/FullscreenControl.gd" id="9_di778"]
+[ext_resource type="Script" path="res://scenes/ScaleControl.gd" id="10_stgfp"]
+[ext_resource type="FontFile" uid="uid://cmlfsmyxy10c6" path="res://Game Logo/airstrikelaser.ttf" id="11_qadlk"]
+[ext_resource type="FontFile" uid="uid://hnp6lr30npli" path="res://Game Logo/airstrikebold.ttf" id="12_40jwx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n14aj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lpxry"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qy7ql"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6xdu5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_45wkc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p5htd"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_1wxw4"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_uxs6l"]
+color = Color(1, 1, 1, 1)
+thickness = 15
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_7mede"]
+color = Color(0, 0.333333, 1, 1)
+thickness = 15
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_ubrea"]
+color = Color(0, 0.333333, 1, 1)
+thickness = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wulf3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ncqdb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8aqf5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fx2fs"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jx47b"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h5fu3"]
 sky_top_color = Color(0.0352941, 0.054902, 0.0784314, 1)
@@ -24,14 +68,22 @@ background_color = Color(1, 1, 1, 1)
 sky = SubResource("Sky_5u6oq")
 tonemap_mode = 2
 glow_enabled = true
-fog_density = 0.0205
+fog_enabled = true
+fog_sun_scatter = 1.0
+fog_density = 0.015
 fog_sky_affect = 0.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.0
-volumetric_fog_albedo = Color(0.415686, 1, 1, 1)
-volumetric_fog_gi_inject = 0.0
+volumetric_fog_albedo = Color(0.517647, 0.552941, 0.607843, 1)
 volumetric_fog_length = 120.0
-volumetric_fog_detail_spread = 0.965936
+volumetric_fog_detail_spread = 0.933033
+volumetric_fog_ambient_inject = 0.2
+volumetric_fog_sky_affect = 0.0
+volumetric_fog_temporal_reprojection_enabled = false
+volumetric_fog_temporal_reprojection_amount = 0.99
+adjustment_enabled = true
+adjustment_contrast = 1.05
+adjustment_saturation = 1.5
 
 [sub_resource type="FogMaterial" id="FogMaterial_qhdlv"]
 
@@ -59,16 +111,385 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_extio")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="UiManager"]
+[node name="ScoreText" type="RichTextLabel" parent="UiManager"]
 modulate = Color(0, 0.65098, 0, 1)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -145.0
+offset_left = -217.0
 offset_bottom = 40.0
 grow_horizontal = 0
+theme_override_fonts/normal_font = ExtResource("5_a4p27")
+theme_override_font_sizes/normal_font_size = 25
 text = "Score:"
+scroll_active = false
+
+[node name="OptionsMenu" type="Panel" parent="UiManager"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -328.5
+offset_top = -223.5
+offset_right = 328.5
+offset_bottom = 223.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OptionsText" type="RichTextLabel" parent="UiManager/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -157.5
+offset_right = 157.5
+offset_bottom = 66.0
+grow_horizontal = 2
+theme = ExtResource("6_lv0ft")
+text = "Options"
+
+[node name="Back" type="Button" parent="UiManager/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -231.0
+offset_bottom = 55.0
+grow_horizontal = 0
+size_flags_vertical = 3
+theme_override_styles/normal = SubResource("StyleBoxEmpty_n14aj")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_lpxry")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_qy7ql")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6xdu5")
+keep_pressed_outside = true
+text = "
+"
+expand_icon = true
+
+[node name="jetpointer" type="TextureRect" parent="UiManager/OptionsMenu/Back"]
+visible = false
+layout_mode = 2
+offset_left = 13.0
+offset_top = 10.0
+offset_right = 53.0
+offset_bottom = 59.0
+texture = ExtResource("7_i8ai6")
+expand_mode = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UiManager/OptionsMenu/Back"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -65.5
+offset_top = 5.5
+offset_right = -4.5
+offset_bottom = 58.5
+grow_horizontal = 0
+mouse_filter = 2
+theme = ExtResource("6_lv0ft")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.203922)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_outline_size = 10
+theme_override_constants/outline_size = 10
+theme_override_fonts/normal_font = ExtResource("5_a4p27")
+theme_override_font_sizes/normal_font_size = 70
+theme_override_font_sizes/italics_font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxEmpty_45wkc")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_p5htd")
+bbcode_enabled = true
+text = "X"
+scroll_active = false
+scroll_following = true
+
+[node name="Pressed" type="Control" parent="UiManager/OptionsMenu/Back"]
+visible = false
+anchors_preset = 0
+offset_left = 29.0
+offset_top = 5.0
+offset_right = 280.0
+offset_bottom = 64.0
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="UiManager/OptionsMenu/Back/Pressed"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(123, 30.5625)
+scale = Vector2(216, 11.125)
+mesh = SubResource("QuadMesh_1wxw4")
+
+[node name="jetpointer" type="TextureRect" parent="UiManager/OptionsMenu/Back/Pressed"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+offset_left = 209.0
+offset_top = 5.0
+offset_right = 249.0
+offset_bottom = 54.0
+texture = ExtResource("7_i8ai6")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UiManager/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -164.0
+offset_top = -116.0
+offset_right = 259.0
+offset_bottom = 95.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 70
+
+[node name="AudioControl" type="HSlider" parent="UiManager/OptionsMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/slider = SubResource("StyleBoxLine_uxs6l")
+theme_override_styles/grabber_area = SubResource("StyleBoxLine_7mede")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxLine_ubrea")
+max_value = 1.0
+step = 0.05
+value = 1.0
+script = ExtResource("8_ptqgx")
+audio_bus_name = "Music"
+
+[node name="FullscreenControl" type="CheckButton" parent="UiManager/OptionsMenu/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("6_lv0ft")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wulf3")
+script = ExtResource("9_di778")
+
+[node name="ScaleControl" type="OptionButton" parent="UiManager/OptionsMenu/VBoxContainer"]
+layout_mode = 2
+item_count = 4
+selected = 0
+popup/item_0/text = "100%"
+popup/item_0/id = 0
+popup/item_1/text = "75%"
+popup/item_1/id = 1
+popup/item_2/text = "50%"
+popup/item_2/id = 2
+popup/item_3/text = "25%"
+popup/item_3/id = 3
+script = ExtResource("10_stgfp")
+
+[node name="MusicVolumeText" type="RichTextLabel" parent="UiManager/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -304.0
+offset_top = 107.5
+offset_right = -141.0
+offset_bottom = 173.5
+grow_horizontal = 2
+theme = ExtResource("6_lv0ft")
+theme_override_font_sizes/normal_font_size = 15
+text = "Music Volume"
+
+[node name="FullscreenText" type="RichTextLabel" parent="UiManager/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -303.0
+offset_top = 198.5
+offset_right = -140.0
+offset_bottom = 264.5
+grow_horizontal = 2
+theme = ExtResource("6_lv0ft")
+theme_override_font_sizes/normal_font_size = 15
+text = "Fullscreen"
+
+[node name="ResolutionText" type="RichTextLabel" parent="UiManager/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -305.0
+offset_top = 297.5
+offset_right = -142.0
+offset_bottom = 363.5
+grow_horizontal = 2
+theme = ExtResource("6_lv0ft")
+theme_override_font_sizes/normal_font_size = 15
+text = "3d Resolution"
+
+[node name="PauseMenu" type="Panel" parent="UiManager"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -174.5
+offset_top = -157.0
+offset_right = 174.5
+offset_bottom = 157.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OptionsText" type="RichTextLabel" parent="UiManager/PauseMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -140.0
+offset_top = 14.0
+offset_right = 175.0
+offset_bottom = 80.0
+grow_horizontal = 2
+theme = ExtResource("6_lv0ft")
+theme_override_fonts/normal_font = ExtResource("11_qadlk")
+text = "Paused"
+
+[node name="Buttons" type="VBoxContainer" parent="UiManager/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 107.0
+offset_bottom = -17.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Resume" type="Button" parent="UiManager/PauseMenu/Buttons"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.780392, 0.411765, 0, 1)
+theme_override_fonts/font = ExtResource("5_a4p27")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ncqdb")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_8aqf5")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_fx2fs")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jx47b")
+text = "Resume"
+
+[node name="Options" type="Button" parent="UiManager/PauseMenu/Buttons"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.780392, 0.411765, 0, 1)
+theme_override_fonts/font = ExtResource("5_a4p27")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ncqdb")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_8aqf5")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_fx2fs")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jx47b")
+keep_pressed_outside = true
+text = "Options"
+
+[node name="Quit" type="Button" parent="UiManager/PauseMenu/Buttons"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.780392, 0.411765, 0, 1)
+theme_override_fonts/font = ExtResource("5_a4p27")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ncqdb")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_8aqf5")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_fx2fs")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jx47b")
+text = "Quit
+"
+
+[node name="RetryMenu" type="Panel" parent="UiManager"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -282.0
+offset_top = -235.0
+offset_right = 282.0
+offset_bottom = 235.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameOverText" type="RichTextLabel" parent="UiManager/RetryMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -191.0
+offset_top = 14.0
+offset_right = 205.0
+offset_bottom = 73.0
+grow_horizontal = 2
+theme = ExtResource("6_lv0ft")
+theme_override_fonts/normal_font = ExtResource("11_qadlk")
+theme_override_font_sizes/normal_font_size = 60
+text = "Game Over"
+
+[node name="FinalScore" type="RichTextLabel" parent="UiManager/RetryMenu"]
+clip_contents = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -280.0
+offset_top = 109.0
+offset_right = 281.0
+offset_bottom = 168.0
+grow_horizontal = 2
+theme = ExtResource("6_lv0ft")
+theme_override_fonts/normal_font = ExtResource("12_40jwx")
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+text = "[center]Score:[/center]"
+scroll_active = false
+
+[node name="Buttons" type="VBoxContainer" parent="UiManager/RetryMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = 275.0
+offset_right = -25.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="PlayAgain" type="Button" parent="UiManager/RetryMenu/Buttons"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.780392, 0.411765, 0, 1)
+theme_override_fonts/font = ExtResource("5_a4p27")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ncqdb")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_8aqf5")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_fx2fs")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jx47b")
+text = "Play Again"
+
+[node name="Options" type="Button" parent="UiManager/RetryMenu/Buttons"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.780392, 0.411765, 0, 1)
+theme_override_fonts/font = ExtResource("5_a4p27")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ncqdb")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_8aqf5")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_fx2fs")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jx47b")
+keep_pressed_outside = true
+text = "Options"
+
+[node name="Quit" type="Button" parent="UiManager/RetryMenu/Buttons"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.780392, 0.411765, 0, 1)
+theme_override_fonts/font = ExtResource("5_a4p27")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ncqdb")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_8aqf5")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_fx2fs")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jx47b")
+text = "Quit
+"
 
 [node name="ScoreManager" type="Node3D" parent="."]
 script = ExtResource("4_on7fe")
@@ -89,7 +510,6 @@ shadow_enabled = true
 sky_mode = 2
 
 [node name="Fog" type="Node3D" parent="Environment"]
-visible = false
 
 [node name="FogVolumeRight" type="FogVolume" parent="Environment/Fog"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -60)
@@ -106,17 +526,17 @@ material = SubResource("FogMaterial_qhdlv")
 [node name="FogVolumeFront(Fixed)" type="FogVolume" parent="Environment/Fog"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100)
 visible = false
-size = Vector3(100, 100, 2)
+size = Vector3(1000, 100, 2)
 material = SubResource("FogMaterial_65f88")
 
 [node name="FogVolumeFront(Fixed)2" type="FogVolume" parent="Environment/Fog"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -130)
 visible = false
-size = Vector3(100, 100, 2)
+size = Vector3(1000, 100, 2)
 
 [node name="FogVolumeFront" type="FogVolume" parent="Environment/Fog"]
 visible = false
-size = Vector3(1000, 100, 7)
+size = Vector3(1000, 100, 20)
 material = SubResource("FogMaterial_4bcnk")
 script = ExtResource("6_oa1j7")
 
@@ -125,24 +545,39 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
 visible = false
 size = Vector3(100, 100, 2)
 
-[node name="Walls" type="Node3D" parent="Environment"]
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 10, 0)
 sky_mode = 1
 
 [connection signal="GameOver" from="." to="Player" method="_on_main_game_over"]
 [connection signal="GameOver" from="." to="ChunkManager" method="_on_main_game_over"]
+[connection signal="GameOver" from="." to="UiManager" method="_on_main_game_over"]
 [connection signal="GameOver" from="." to="ScoreManager" method="_on_main_game_over"]
+[connection signal="GameOver" from="." to="Environment" method="_on_main_game_over"]
 [connection signal="AddScore" from="Player" to="ScoreManager" method="_on_player_add_score"]
 [connection signal="CurrentHeight" from="Player" to="ScoreManager" method="_on_player_current_height"]
 [connection signal="Player_Dead" from="Player" to="." method="_on_player_player_dead"]
 [connection signal="Add_Chunk_Clear_Score" from="ChunkManager" to="ScoreManager" method="_on_chunk_manager_add_chunk_clear_score"]
 [connection signal="Day_Night_Cycle" from="ChunkManager" to="Environment" method="_on_chunk_manager_day_night_cycle"]
 [connection signal="End_Of_Chunk" from="ChunkManager" to="Player" method="_on_chunk_manager_end_of_chunk"]
+[connection signal="Fog_Activation" from="ChunkManager" to="Environment" method="_on_chunk_manager_fog_activation"]
 [connection signal="Fog_Activation" from="ChunkManager" to="Environment/Fog/FogVolumeFront" method="_on_chunk_manager_fog_activation"]
 [connection signal="Is_Scoring" from="ChunkManager" to="ScoreManager" method="_on_chunk_manager_is_scoring"]
 [connection signal="chunk_type" from="ChunkManager" to="Player" method="_on_chunk_manager_chunk_type"]
 [connection signal="chunk_type" from="ChunkManager" to="Environment" method="_on_chunk_manager_chunk_type"]
+[connection signal="mouse_entered" from="UiManager/OptionsMenu/Back" to="UiManager" method="_on_back_mouse_entered"]
+[connection signal="mouse_exited" from="UiManager/OptionsMenu/Back" to="UiManager" method="_on_back_mouse_exited"]
+[connection signal="pressed" from="UiManager/OptionsMenu/Back" to="UiManager" method="_on_back_pressed"]
+[connection signal="value_changed" from="UiManager/OptionsMenu/VBoxContainer/AudioControl" to="UiManager" method="_on_audio_control_value_changed"]
+[connection signal="value_changed" from="UiManager/OptionsMenu/VBoxContainer/AudioControl" to="UiManager/OptionsMenu/VBoxContainer/AudioControl" method="_on_value_changed"]
+[connection signal="toggled" from="UiManager/OptionsMenu/VBoxContainer/FullscreenControl" to="UiManager/OptionsMenu/VBoxContainer/FullscreenControl" method="_on_toggled"]
+[connection signal="item_selected" from="UiManager/OptionsMenu/VBoxContainer/ScaleControl" to="UiManager/OptionsMenu/VBoxContainer/ScaleControl" method="_on_item_selected"]
+[connection signal="pressed" from="UiManager/PauseMenu/Buttons/Resume" to="UiManager" method="_on_resume_pressed"]
+[connection signal="pressed" from="UiManager/PauseMenu/Buttons/Options" to="UiManager" method="_on_options_pressed"]
+[connection signal="pressed" from="UiManager/PauseMenu/Buttons/Quit" to="UiManager" method="_on_quit_pressed"]
+[connection signal="pressed" from="UiManager/RetryMenu/Buttons/PlayAgain" to="UiManager" method="_on_play_again_pressed"]
+[connection signal="pressed" from="UiManager/RetryMenu/Buttons/Options" to="UiManager" method="_on_options_pressed"]
+[connection signal="pressed" from="UiManager/RetryMenu/Buttons/Quit" to="UiManager" method="_on_quit_pressed"]
+[connection signal="FinalScore" from="ScoreManager" to="UiManager" method="_on_score_manager_final_score"]
 [connection signal="ScoreUpdated" from="ScoreManager" to="UiManager" method="_on_score_manager_score_updated"]
 [connection signal="timeout" from="ScoreManager/ScoreTimer" to="ScoreManager" method="_on_score_timer_timeout"]

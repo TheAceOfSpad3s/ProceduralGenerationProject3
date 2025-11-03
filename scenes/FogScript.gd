@@ -2,6 +2,7 @@ extends FogVolume
 
 var IsShowing = false
 var FogSpeed: float = 0.0
+@onready var environment = $"../../WorldEnvironment"
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if not IsShowing:
@@ -24,4 +25,7 @@ func _on_chunk_manager_fog_activation(is_showing, fog_speed, fog_offset):
 		IsShowing = false
 	else:
 		print("error")
+
+
+
 

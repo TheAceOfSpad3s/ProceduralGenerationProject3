@@ -1,7 +1,7 @@
 extends Node3D
 
 signal ScoreUpdated(score: int)
-
+signal FinalScore(score: int)
 var is_scoring = true
 var score : float = 0.0
 var player_current_height : float = 0.0
@@ -28,7 +28,8 @@ func _on_score_timer_timeout():
 
 func _on_main_game_over():
 	is_scoring = false
-
+	var rounded_score = max(0.0, round(score / 5.0) * 5.0)  
+	FinalScore.emit(rounded_score)
 
 func _on_chunk_manager_is_scoring():
 	is_scoring = not is_scoring

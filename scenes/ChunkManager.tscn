@@ -12,12 +12,12 @@ mountain_scenes = Array[PackedScene]([ExtResource("3_0q8qu")])
 transition_scenes = Array[PackedScene]([ExtResource("4_f3b6i")])
 
 [node name="ChunkTimer" type="Timer" parent="."]
-wait_time = 5.0
+wait_time = 30.0
 one_shot = true
 autostart = true
 
 [node name="FogTimer" type="Timer" parent="."]
-wait_time = 7.0
+wait_time = 12.0
 
 [connection signal="timeout" from="ChunkTimer" to="." method="_on_chunk_timer_timeout"]
 [connection signal="timeout" from="FogTimer" to="." method="_on_fog_timer_timeout"]

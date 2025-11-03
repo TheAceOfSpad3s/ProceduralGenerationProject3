@@ -1,0 +1,982 @@
+[gd_scene load_steps=41 format=3 uid="uid://dnld7hmree0c6"]
+
+[ext_resource type="PackedScene" uid="uid://b3g80s5355tck" path="res://Models/low-poly_aircraft_carrier.glb" id="1_4ori8"]
+[ext_resource type="PackedScene" uid="uid://bf01xr5ocajub" path="res://Models/Jet.glb" id="2_vn0y5"]
+[ext_resource type="Shader" path="res://Water.gdshader" id="3_er6o2"]
+[ext_resource type="Script" path="res://scenes/MenuCamera.gd" id="4_3f0fs"]
+[ext_resource type="Script" path="res://scenes/MenuUI.gd" id="4_fp3rv"]
+[ext_resource type="Texture2D" uid="uid://wnulwqeflcwe" path="res://Game Logo/Title Logo/Game Title Logo Reach.png" id="5_ikeha"]
+[ext_resource type="Texture2D" uid="uid://dvmvege8nykx3" path="res://Game Logo/Title Logo/Game Title Logo The.png" id="6_gonjf"]
+[ext_resource type="Theme" uid="uid://dnvv3hxe84cqr" path="res://Materials/Menu_Theme.tres" id="6_jqox7"]
+[ext_resource type="Texture2D" uid="uid://cloiyd1wfbf8b" path="res://Game Logo/Title Logo/Game Title Logo Red.png" id="7_csfn6"]
+[ext_resource type="Texture2D" uid="uid://n8ovob6iboiy" path="res://Game Logo/Title Logo/Game Title Logo Blue.png" id="8_eguxx"]
+[ext_resource type="Texture2D" uid="uid://dgnyqa4uxnp18" path="res://Game Logo/Title Logo/Game Title Logo Horizon Red.png" id="8_ick8o"]
+[ext_resource type="Script" path="res://scenes/AudioControl.gd" id="9_owfev"]
+[ext_resource type="Script" path="res://scenes/FullscreenControl.gd" id="10_cej5k"]
+[ext_resource type="Script" path="res://scenes/ScaleControl.gd" id="11_6jcue"]
+[ext_resource type="FontFile" uid="uid://0f58wm37x6gj" path="res://Game Logo/airstrike.ttf" id="15_055we"]
+[ext_resource type="Texture2D" uid="uid://do5flapghgiyi" path="res://Game Logo/Gemini_Generated_Image_sxv4vosxv4vosxv4-Photoroom.png" id="15_jwkjh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dqyy8"]
+albedo_color = Color(0.270588, 0.352941, 0.392157, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_h010x"]
+material = SubResource("StandardMaterial3D_dqyy8")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jbdvd"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dl5ao"]
+material = SubResource("StandardMaterial3D_jbdvd")
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3sunf"]
+sky_top_color = Color(0.345098, 0.592157, 0.980392, 1)
+sky_horizon_color = Color(0.827451, 0.568627, 0.419608, 1)
+ground_bottom_color = Color(0, 0, 1, 1)
+ground_horizon_color = Color(0.827451, 0.568627, 0.419608, 1)
+sun_angle_max = 360.0
+sun_curve = 0.0832177
+
+[sub_resource type="Sky" id="Sky_r4a21"]
+sky_material = SubResource("ProceduralSkyMaterial_3sunf")
+
+[sub_resource type="Environment" id="Environment_cphfj"]
+background_mode = 2
+sky = SubResource("Sky_r4a21")
+ambient_light_color = Color(0.901961, 0.686275, 0, 1)
+ambient_light_energy = 0.0
+tonemap_mode = 3
+tonemap_white = 3.0
+ssr_fade_in = 7.53202
+ssr_fade_out = 42.2242
+ssr_depth_tolerance = 0.01
+ssao_enabled = true
+ssao_intensity = 1.0
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 1.5
+glow_strength = 0.9
+glow_bloom = 0.1
+glow_blend_mode = 1
+fog_light_color = Color(0.812883, 0.439088, 9.62615e-07, 1)
+fog_density = 0.001
+fog_sky_affect = 0.0
+fog_height = 1024.0
+volumetric_fog_density = 0.02
+adjustment_enabled = true
+adjustment_contrast = 1.04
+adjustment_saturation = 1.1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1yajl"]
+render_priority = 0
+shader = ExtResource("3_er6o2")
+shader_parameter/out_color = Color(0, 0, 1, 1)
+shader_parameter/amount = 0.5
+shader_parameter/speed = 1.8
+shader_parameter/beer_factor = 0.2
+shader_parameter/metallic = 0.0
+shader_parameter/specular = 0.5
+shader_parameter/roughness = 0.2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_4wobf"]
+material = SubResource("ShaderMaterial_1yajl")
+size = Vector2(100, 100)
+subdivide_width = 50
+subdivide_depth = 50
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_14v7k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qgkk6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0vwnp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_18ghp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s6kcy"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3g8lq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ml2k0"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_aivqx"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_obt2r"]
+color = Color(1, 1, 1, 1)
+thickness = 15
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_l4ut3"]
+color = Color(0, 0.333333, 1, 1)
+thickness = 15
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_dbnhq"]
+color = Color(0, 0.333333, 1, 1)
+thickness = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c6u4d"]
+
+[sub_resource type="Animation" id="Animation_tpybu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Reach:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Reach:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("The:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 2)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("The:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Horizon:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.0156863)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Horizon:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 2)]
+}
+tracks/6/type = "bezier"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Horizon:scale:x")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(2, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/7/type = "bezier"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Horizon:scale:y")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(2, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Horizon:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_mjtdr"]
+resource_name = "Title_Slam"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Reach:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Reach:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("The:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("The:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = false
+tracks/4/path = NodePath("Horizon:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1, 1.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.0156863), Color(1, 1, 1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = false
+tracks/5/path = NodePath("Horizon:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(1, 1.199, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(0.97, 0.97), Vector2(1, 1)]
+}
+tracks/6/type = "bezier"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Horizon:scale:x")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(2, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(1, 1.2)
+}
+tracks/7/type = "bezier"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Horizon:scale:y")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(2, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(1, 1.2)
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Horizon:modulate")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(1, 1.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_15js2"]
+_data = {
+"RESET": SubResource("Animation_tpybu"),
+"Title_Slam": SubResource("Animation_mjtdr")
+}
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 4.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="3D" type="Node3D" parent="."]
+
+[node name="AirCraft Carrier" parent="3D" instance=ExtResource("1_4ori8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.89672, 0, -1.64919)
+
+[node name="Jet" parent="3D" instance=ExtResource("2_vn0y5")]
+transform = Transform3D(0.130528, 0.0111558, -0.0730614, 0.00310175, 0.147324, 0.0280364, 0.0738431, -0.0259077, 0.127969, 0.0323775, 1.09188, -3.49799)
+
+[node name="Legs" type="Node3D" parent="3D/Jet"]
+transform = Transform3D(4.80828, 0.103392, 1.3674, 0.157995, 4.9108, -0.926878, -1.36218, 0.934546, 4.71923, 1.14824, -8.15764, 11.6157)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="3D/Jet/Legs"]
+transform = Transform3D(0.05, 2.23517e-09, 0, 0, 0.3, 0, 1.49012e-09, -4.47035e-09, 0.05, 0.220145, 1.07624, -1.70857)
+mesh = SubResource("CylinderMesh_h010x")
+skeleton = NodePath("../../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="3D/Jet/Legs"]
+transform = Transform3D(-2.17565e-09, -0.05, 0, 0.06, -2.18557e-09, 0, -8.9407e-10, -1.49012e-09, 0.05, 0.220145, 0.896065, -1.70597)
+mesh = SubResource("CylinderMesh_h010x")
+skeleton = NodePath("../../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="3D/Jet/Legs"]
+transform = Transform3D(-1.81304e-09, -0.055, 0, 0.05, -2.40413e-09, 0, -7.45058e-10, -1.63913e-09, 0.04, 0.220145, 0.896065, -1.70738)
+mesh = SubResource("CylinderMesh_dl5ao")
+skeleton = NodePath("../../..")
+
+[node name="Legs2" type="Node3D" parent="3D/Jet"]
+transform = Transform3D(1.99766, 0.0413566, 0.0874985, -0.0242274, 1.96432, -0.375319, -0.0936986, 0.373819, 1.96252, -0.686272, -3.36062, 1.11063)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="3D/Jet/Legs2"]
+transform = Transform3D(0.05, 2.23517e-09, 0, 0, 0.3, 0, 1.49012e-09, -4.47035e-09, 0.05, 0.220145, 1.07624, -1.70857)
+mesh = SubResource("CylinderMesh_h010x")
+skeleton = NodePath("../../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="3D/Jet/Legs2"]
+transform = Transform3D(-2.17565e-09, -0.05, 0, 0.06, -2.18557e-09, 0, -8.9407e-10, -1.49012e-09, 0.05, 0.220145, 0.896065, -1.70597)
+mesh = SubResource("CylinderMesh_h010x")
+skeleton = NodePath("../../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="3D/Jet/Legs2"]
+transform = Transform3D(-1.81304e-09, -0.055, 0, 0.05, -2.40413e-09, 0, -7.45058e-10, -1.63913e-09, 0.04, 0.220145, 0.896065, -1.70738)
+mesh = SubResource("CylinderMesh_dl5ao")
+skeleton = NodePath("../../..")
+
+[node name="Legs3" type="Node3D" parent="3D/Jet"]
+transform = Transform3D(1.99766, 0.0413566, 0.0874985, -0.0242274, 1.96432, -0.375319, -0.0936986, 0.37382, 1.96252, -1.43122, -3.32926, 1.19511)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="3D/Jet/Legs3"]
+transform = Transform3D(0.05, 2.23517e-09, 0, 0, 0.3, 0, 1.49012e-09, -4.47035e-09, 0.05, 0.220145, 1.07624, -1.70857)
+mesh = SubResource("CylinderMesh_h010x")
+skeleton = NodePath("../../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="3D/Jet/Legs3"]
+transform = Transform3D(-2.17565e-09, -0.05, 0, 0.06, -2.18557e-09, 0, -8.9407e-10, -1.49012e-09, 0.05, 0.220145, 0.896065, -1.70597)
+mesh = SubResource("CylinderMesh_h010x")
+skeleton = NodePath("../../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="3D/Jet/Legs3"]
+transform = Transform3D(-1.81304e-09, -0.055, 0, 0.05, -2.40413e-09, 0, -7.45058e-10, -1.63913e-09, 0.04, 0.220145, 0.896065, -1.70738)
+mesh = SubResource("CylinderMesh_dl5ao")
+skeleton = NodePath("../../..")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="3D"]
+environment = SubResource("Environment_cphfj")
+
+[node name="Water" type="Node3D" parent="3D"]
+
+[node name="water_mesh" type="MeshInstance3D" parent="3D/Water"]
+mesh = SubResource("PlaneMesh_4wobf")
+
+[node name="Camera3D" type="Camera3D" parent="3D"]
+transform = Transform3D(-0.0260199, 0, -0.999661, 0, 1, 0, 0.999661, 0, -0.0260199, -0.997162, 1.25601, -2.76814)
+far = 41.59
+script = ExtResource("4_3f0fs")
+noise = SubResource("FastNoiseLite_14v7k")
+
+[node name="Lighting" type="Node3D" parent="3D"]
+
+[node name="Fake Sun" type="DirectionalLight3D" parent="3D/Lighting"]
+transform = Transform3D(-0.719309, -0.267291, 0.64121, -0.438175, 0.890816, -0.120204, -0.539071, -0.367426, -0.757892, 0, 0, 0)
+light_color = Color(1, 0.529412, 0.498039, 1)
+shadow_enabled = true
+
+[node name="Real Sun" type="DirectionalLight3D" parent="3D/Lighting"]
+transform = Transform3D(-0.973658, -0.197467, 0.114007, -0.171698, 0.963952, 0.203264, -0.150035, 0.178335, -0.972464, 0, 0, 0)
+light_color = Color(0.94392, 0.600498, 0, 1)
+light_energy = 0.85
+shadow_enabled = true
+shadow_bias = 0.0
+shadow_normal_bias = 2.594
+shadow_reverse_cull_face = true
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_fp3rv")
+
+[node name="OptionsMenu" type="Panel" parent="UI"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -328.5
+offset_top = -223.5
+offset_right = 328.5
+offset_bottom = 223.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OptionsText" type="RichTextLabel" parent="UI/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -157.5
+offset_right = 157.5
+offset_bottom = 66.0
+grow_horizontal = 2
+theme = ExtResource("6_jqox7")
+text = "Options"
+
+[node name="Back" type="Button" parent="UI/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -231.0
+offset_bottom = 55.0
+grow_horizontal = 0
+size_flags_vertical = 3
+theme_override_styles/normal = SubResource("StyleBoxEmpty_qgkk6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_0vwnp")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_18ghp")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_s6kcy")
+keep_pressed_outside = true
+text = "
+"
+expand_icon = true
+
+[node name="jetpointer" type="TextureRect" parent="UI/OptionsMenu/Back"]
+visible = false
+layout_mode = 2
+offset_left = 13.0
+offset_top = 10.0
+offset_right = 53.0
+offset_bottom = 59.0
+texture = ExtResource("15_jwkjh")
+expand_mode = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/OptionsMenu/Back"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -65.5
+offset_top = 5.5
+offset_right = -4.5
+offset_bottom = 58.5
+grow_horizontal = 0
+mouse_filter = 2
+theme = ExtResource("6_jqox7")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.203922)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_outline_size = 10
+theme_override_constants/outline_size = 10
+theme_override_fonts/normal_font = ExtResource("15_055we")
+theme_override_font_sizes/normal_font_size = 70
+theme_override_font_sizes/italics_font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxEmpty_3g8lq")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ml2k0")
+bbcode_enabled = true
+text = "X"
+scroll_active = false
+scroll_following = true
+
+[node name="Pressed" type="Control" parent="UI/OptionsMenu/Back"]
+visible = false
+anchors_preset = 0
+offset_left = 29.0
+offset_top = 5.0
+offset_right = 280.0
+offset_bottom = 64.0
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="UI/OptionsMenu/Back/Pressed"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(123, 30.5625)
+scale = Vector2(216, 11.125)
+mesh = SubResource("QuadMesh_aivqx")
+
+[node name="jetpointer" type="TextureRect" parent="UI/OptionsMenu/Back/Pressed"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+offset_left = 209.0
+offset_top = 5.0
+offset_right = 249.0
+offset_bottom = 54.0
+texture = ExtResource("15_jwkjh")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -164.0
+offset_top = -116.0
+offset_right = 259.0
+offset_bottom = 95.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 70
+
+[node name="AudioControl" type="HSlider" parent="UI/OptionsMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/slider = SubResource("StyleBoxLine_obt2r")
+theme_override_styles/grabber_area = SubResource("StyleBoxLine_l4ut3")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxLine_dbnhq")
+max_value = 1.0
+step = 0.05
+value = 1.0
+script = ExtResource("9_owfev")
+audio_bus_name = "Music"
+
+[node name="FullscreenControl" type="CheckButton" parent="UI/OptionsMenu/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("6_jqox7")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_c6u4d")
+script = ExtResource("10_cej5k")
+
+[node name="ScaleControl" type="OptionButton" parent="UI/OptionsMenu/VBoxContainer"]
+layout_mode = 2
+item_count = 4
+selected = 0
+popup/item_0/text = "100%"
+popup/item_0/id = 0
+popup/item_1/text = "75%"
+popup/item_1/id = 1
+popup/item_2/text = "50%"
+popup/item_2/id = 2
+popup/item_3/text = "25%"
+popup/item_3/id = 3
+script = ExtResource("11_6jcue")
+
+[node name="MusicVolumeText" type="RichTextLabel" parent="UI/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -304.0
+offset_top = 107.5
+offset_right = -141.0
+offset_bottom = 173.5
+grow_horizontal = 2
+theme = ExtResource("6_jqox7")
+theme_override_font_sizes/normal_font_size = 15
+text = "Music Volume"
+
+[node name="FullscreenText" type="RichTextLabel" parent="UI/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -303.0
+offset_top = 198.5
+offset_right = -140.0
+offset_bottom = 264.5
+grow_horizontal = 2
+theme = ExtResource("6_jqox7")
+theme_override_font_sizes/normal_font_size = 15
+text = "Fullscreen"
+
+[node name="ResolutionText" type="RichTextLabel" parent="UI/OptionsMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -305.0
+offset_top = 297.5
+offset_right = -142.0
+offset_bottom = 363.5
+grow_horizontal = 2
+theme = ExtResource("6_jqox7")
+theme_override_font_sizes/normal_font_size = 15
+text = "3d Resolution"
+
+[node name="Title Logo" type="Control" parent="UI"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Reach" type="Node2D" parent="UI/Title Logo"]
+modulate = Color(1, 1, 1, 0)
+scale = Vector2(2, 2)
+
+[node name="Reach" type="TextureRect" parent="UI/Title Logo/Reach"]
+offset_left = 656.0
+offset_top = -14.0
+offset_right = 1210.0
+offset_bottom = 309.0
+mouse_filter = 2
+texture = ExtResource("5_ikeha")
+expand_mode = 1
+
+[node name="The" type="Node2D" parent="UI/Title Logo"]
+modulate = Color(1, 1, 1, 0)
+scale = Vector2(2, 2)
+
+[node name="The" type="TextureRect" parent="UI/Title Logo/The"]
+offset_left = 656.0
+offset_top = -14.0
+offset_right = 1210.0
+offset_bottom = 309.0
+mouse_filter = 2
+texture = ExtResource("6_gonjf")
+expand_mode = 1
+
+[node name="Horizon3" type="Node2D" parent="UI/Title Logo"]
+modulate = Color(1, 1, 1, 0.0156863)
+scale = Vector2(2, 2)
+
+[node name="TextureRect2" type="TextureRect" parent="UI/Title Logo/Horizon3"]
+visible = false
+offset_left = 656.0
+offset_top = -14.0
+offset_right = 1210.0
+offset_bottom = 309.0
+mouse_filter = 2
+texture = ExtResource("8_eguxx")
+expand_mode = 1
+
+[node name="Horizon" type="TextureRect" parent="UI/Title Logo/Horizon3"]
+offset_left = 656.0
+offset_top = -14.0
+offset_right = 1210.0
+offset_bottom = 309.0
+mouse_filter = 2
+texture = ExtResource("8_ick8o")
+expand_mode = 1
+
+[node name="Horizon2" type="TextureRect" parent="UI/Title Logo/Horizon3"]
+offset_left = 656.0
+offset_top = -14.0
+offset_right = 1210.0
+offset_bottom = 309.0
+mouse_filter = 2
+texture = ExtResource("8_ick8o")
+expand_mode = 1
+
+[node name="TextureRect" type="TextureRect" parent="UI/Title Logo/Horizon3"]
+visible = false
+offset_left = 656.0
+offset_top = -14.0
+offset_right = 1210.0
+offset_bottom = 309.0
+mouse_filter = 2
+texture = ExtResource("7_csfn6")
+expand_mode = 1
+
+[node name="Horizon" type="Node2D" parent="UI/Title Logo"]
+modulate = Color(1, 1, 1, 0)
+scale = Vector2(2, 2)
+
+[node name="Horizon" type="TextureRect" parent="UI/Title Logo/Horizon"]
+offset_left = 656.0
+offset_top = -14.0
+offset_right = 1210.0
+offset_bottom = 309.0
+mouse_filter = 2
+texture = ExtResource("8_ick8o")
+expand_mode = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/Title Logo"]
+libraries = {
+"": SubResource("AnimationLibrary_15js2")
+}
+
+[node name="Buttons" type="VBoxContainer" parent="UI"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -339.0
+offset_top = -67.0
+offset_right = -50.0
+offset_bottom = 186.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 30
+
+[node name="Play" type="Button" parent="UI/Buttons"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/normal = SubResource("StyleBoxEmpty_qgkk6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_0vwnp")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_18ghp")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_s6kcy")
+keep_pressed_outside = true
+text = "
+"
+expand_icon = true
+
+[node name="jetpointer" type="TextureRect" parent="UI/Buttons/Play"]
+visible = false
+layout_mode = 2
+offset_left = -2.0
+offset_top = 9.0
+offset_right = 38.0
+offset_bottom = 58.0
+texture = ExtResource("15_jwkjh")
+expand_mode = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/Buttons/Play"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.203922)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_outline_size = 10
+theme_override_constants/outline_size = 10
+theme_override_fonts/normal_font = ExtResource("15_055we")
+theme_override_font_sizes/normal_font_size = 70
+theme_override_font_sizes/italics_font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxEmpty_3g8lq")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ml2k0")
+bbcode_enabled = true
+text = "[center][color=#0077FF]P[/color][color=#2299FF]L[/color][color=#44BBFF]A[/color][color=#66DDFF]Y[/color][/center]"
+scroll_active = false
+scroll_following = true
+
+[node name="Pressed" type="Control" parent="UI/Buttons/Play"]
+visible = false
+anchors_preset = 0
+offset_left = 29.0
+offset_top = 5.0
+offset_right = 280.0
+offset_bottom = 64.0
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="UI/Buttons/Play/Pressed"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(123, 30.5625)
+scale = Vector2(216, 11.125)
+mesh = SubResource("QuadMesh_aivqx")
+
+[node name="jetpointer" type="TextureRect" parent="UI/Buttons/Play/Pressed"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+offset_left = 209.0
+offset_top = 5.0
+offset_right = 249.0
+offset_bottom = 54.0
+texture = ExtResource("15_jwkjh")
+expand_mode = 1
+
+[node name="Options" type="Button" parent="UI/Buttons"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/normal = SubResource("StyleBoxEmpty_qgkk6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_0vwnp")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_18ghp")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_s6kcy")
+keep_pressed_outside = true
+text = "
+"
+expand_icon = true
+
+[node name="jetpointer" type="TextureRect" parent="UI/Buttons/Options"]
+visible = false
+layout_mode = 2
+offset_left = -73.0
+offset_top = 12.0
+offset_right = -35.0
+offset_bottom = 53.0
+texture = ExtResource("15_jwkjh")
+expand_mode = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/Buttons/Options"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -55.0
+offset_top = -3.0
+offset_right = 46.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.203922)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_outline_size = 10
+theme_override_constants/outline_size = 10
+theme_override_fonts/normal_font = ExtResource("15_055we")
+theme_override_font_sizes/normal_font_size = 70
+theme_override_font_sizes/italics_font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxEmpty_3g8lq")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ml2k0")
+bbcode_enabled = true
+text = "[center][color=#0077FF]O[/color][color=#1188FF]P[/color][color=#2299FF]T[/color][color=#33AADD]I[/color][color=#44BBFF]O[/color][color=#55CCFF]N[/color][color=#66DDFF]S[/color][/center]"
+fit_content = true
+scroll_active = false
+scroll_following = true
+
+[node name="Pressed" type="Control" parent="UI/Buttons/Options"]
+visible = false
+anchors_preset = 0
+offset_left = 108.0
+offset_top = 6.0
+offset_right = 430.0
+offset_bottom = 65.0
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="UI/Buttons/Options/Pressed"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(31, 30.5625)
+scale = Vector2(356, 11.125)
+mesh = SubResource("QuadMesh_aivqx")
+
+[node name="jetpointer" type="TextureRect" parent="UI/Buttons/Options/Pressed"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+offset_left = 192.0
+offset_top = 5.0
+offset_right = 232.0
+offset_bottom = 54.0
+texture = ExtResource("15_jwkjh")
+expand_mode = 1
+
+[node name="Quit" type="Button" parent="UI/Buttons"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/normal = SubResource("StyleBoxEmpty_qgkk6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_0vwnp")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_18ghp")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_s6kcy")
+keep_pressed_outside = true
+text = "
+"
+expand_icon = true
+
+[node name="jetpointer" type="TextureRect" parent="UI/Buttons/Quit"]
+visible = false
+layout_mode = 2
+offset_left = 13.0
+offset_top = 10.0
+offset_right = 53.0
+offset_bottom = 59.0
+texture = ExtResource("15_jwkjh")
+expand_mode = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/Buttons/Quit"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("6_jqox7")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.203922)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_outline_size = 10
+theme_override_constants/outline_size = 10
+theme_override_fonts/normal_font = ExtResource("15_055we")
+theme_override_font_sizes/normal_font_size = 70
+theme_override_font_sizes/italics_font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxEmpty_3g8lq")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ml2k0")
+bbcode_enabled = true
+text = "[center][color=#0077FF]Q[/color][color=#2299FF]U[/color][color=#44BBFF]I[/color][color=#66DDFF]T[/color][/center]"
+scroll_active = false
+scroll_following = true
+
+[node name="Pressed" type="Control" parent="UI/Buttons/Quit"]
+visible = false
+anchors_preset = 0
+offset_left = 29.0
+offset_top = 5.0
+offset_right = 280.0
+offset_bottom = 64.0
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="UI/Buttons/Quit/Pressed"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(123, 30.5625)
+scale = Vector2(216, 11.125)
+mesh = SubResource("QuadMesh_aivqx")
+
+[node name="jetpointer" type="TextureRect" parent="UI/Buttons/Quit/Pressed"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 2
+offset_left = 209.0
+offset_top = 5.0
+offset_right = 249.0
+offset_bottom = 54.0
+texture = ExtResource("15_jwkjh")
+expand_mode = 1
+
+[connection signal="mouse_entered" from="UI/OptionsMenu/Back" to="UI" method="_on_back_mouse_entered"]
+[connection signal="mouse_exited" from="UI/OptionsMenu/Back" to="UI" method="_on_back_mouse_exited"]
+[connection signal="pressed" from="UI/OptionsMenu/Back" to="UI" method="_on_back_pressed"]
+[connection signal="value_changed" from="UI/OptionsMenu/VBoxContainer/AudioControl" to="UI/OptionsMenu/VBoxContainer/AudioControl" method="_on_value_changed"]
+[connection signal="toggled" from="UI/OptionsMenu/VBoxContainer/FullscreenControl" to="UI/OptionsMenu/VBoxContainer/FullscreenControl" method="_on_toggled"]
+[connection signal="item_selected" from="UI/OptionsMenu/VBoxContainer/ScaleControl" to="UI/OptionsMenu/VBoxContainer/ScaleControl" method="_on_item_selected"]
+[connection signal="mouse_entered" from="UI/Buttons/Play" to="UI" method="_on_play_mouse_entered"]
+[connection signal="mouse_exited" from="UI/Buttons/Play" to="UI" method="_on_play_mouse_exited"]
+[connection signal="pressed" from="UI/Buttons/Play" to="UI" method="_on_play_pressed"]
+[connection signal="mouse_entered" from="UI/Buttons/Options" to="UI" method="_on_options_mouse_entered"]
+[connection signal="mouse_exited" from="UI/Buttons/Options" to="UI" method="_on_options_mouse_exited"]
+[connection signal="pressed" from="UI/Buttons/Options" to="UI" method="_on_options_pressed"]
+[connection signal="mouse_entered" from="UI/Buttons/Quit" to="UI" method="_on_quit_mouse_entered"]
+[connection signal="mouse_exited" from="UI/Buttons/Quit" to="UI" method="_on_quit_mouse_exited"]
+[connection signal="pressed" from="UI/Buttons/Quit" to="UI" method="_on_quit_pressed"]

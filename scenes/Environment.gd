@@ -87,7 +87,11 @@ func _apply_state(state_index: int, duration: float):
 		tween.tween_property(sun, "rotation_degrees:x", sunRotationX, duration)
 	
 	print("World transitioning to state: ", state_data.name)
-
+	
+	if currentDayState == 3:
+		world_environment.environment.fog_enabled = false
+	else:
+		world_environment.environment.fog_enabled = true
 
 
 # --- Signal Handler ---
@@ -95,15 +99,30 @@ func _apply_state(state_index: int, duration: float):
 # This function is called every time ChunkManager emits its signal
 func _on_chunk_manager_day_night_cycle():
 	_transition_to_next_state()
-
+	
 
 func _on_chunk_manager_chunk_type(chunk_type):
 	if adjust_sun:
-		if chunk_type == 0 and currentDayState == 1:
-			sun.rotation.x = deg_to_rad(200.0)
-		elif chunk_type == 1 and currentDayState == 1:
-			sun.rotation.x = deg_to_rad(195.0)
-
+		if chunk_type == 0:
+			world_environment.environment.fog_density = 0.015
+			if currentDayState == 1:
+				sun.rotation.x = deg_to_rad(200.0)
+		elif chunk_type == 1:
+			world_environment.environment.fog_density = 0.01
+			if currentDayState == 1:
+				sun.rotation.x = deg_to_rad(195.0)
 	adjust_sun = true
 
+
 	
+func _on_chunk_manager_fog_activation(_is_showing, _fog_speed, _fog_offset):
+	if world_environment.environment.volumetric_fog_sky_affect == 1:
+		world_environment.environment.volumetric_fog_sky_affect = 0
+	else:
+		world_environment.environment.volumetric_fog_sky_affect = 1
+
+
+
+
+func _on_main_game_over():
+	world_environment.environment.volumetric_fog_enabled = false

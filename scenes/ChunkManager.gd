@@ -4,7 +4,7 @@ extends Node3D
 # Common
 @export var num_chunks := 10
 @export var speed := 40.0 # world moves toward player (units/sec)
-@export var initial_spawn_offset := 10.0 # New variable to control how far back chunks spawn
+@export var initial_spawn_offset := 14.0 # New variable to control how far back chunks spawn
 
 @onready var fog_timer = $FogTimer
 @onready var chunk_timer = $ChunkTimer
@@ -250,13 +250,13 @@ func _process(delta: float) -> void:
 func _on_chunk_timer_timeout():
 	chunk_timer.stop()
 	new_chunks_spawn = false
-	var fog_offset = -200 if current_chunk_type == Chunk_Type.Mountains else -250
+	var fog_offset = -150 if current_chunk_type == Chunk_Type.Mountains else -218
 	fog_timer.start()
 	Fog_Activation.emit(true, speed, fog_offset)
 func _on_fog_timer_timeout():
 	new_chunks_spawn = false
 	fog_timer.stop()
-	var fog_offset = -200 
+	var fog_offset = -140 
 	Fog_Activation.emit(true, speed, fog_offset)
 
 func _on_main_game_over():
