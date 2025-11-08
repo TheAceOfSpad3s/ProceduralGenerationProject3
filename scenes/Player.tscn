@@ -1,6 +1,6 @@
 [gd_scene load_steps=29 format=3 uid="uid://j7eb2cgdfiyg"]
 
-[ext_resource type="Script" path="res://scenes/Player.gd" id="1_bdvmp"]
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_bdvmp"]
 [ext_resource type="Shader" path="res://GPUTrail-main/shaders/trail.gdshader" id="2_api5v"]
 [ext_resource type="ArrayMesh" uid="uid://bepj0eb4m4yio" path="res://Models/Jet_Model.tres" id="2_wylbm"]
 [ext_resource type="Shader" path="res://GPUTrail-main/shaders/trail_draw_pass.gdshader" id="3_agft2"]

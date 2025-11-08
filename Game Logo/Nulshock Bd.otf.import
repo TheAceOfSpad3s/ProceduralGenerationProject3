@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://d4kabkagmfeq"
-path="res://.godot/imported/Comfortaa-Bold.ttf-20624f2383b87ebd431422166a76dc9b.fontdata"
+uid="uid://b6ikd0ia7dnpg"
+path="res://.godot/imported/Nulshock Bd.otf-74ff4d1ca2326a7e8d00b33305a6143b.fontdata"
 
 [deps]
 
-source_file="res://silent_wolf/assets/fonts/Comfortaa-Bold.ttf"
-dest_files=["res://.godot/imported/Comfortaa-Bold.ttf-20624f2383b87ebd431422166a76dc9b.fontdata"]
+source_file="res://Game Logo/Nulshock Bd.otf"
+dest_files=["res://.godot/imported/Nulshock Bd.otf-74ff4d1ca2326a7e8d00b33305a6143b.fontdata"]
 
 [params]
 

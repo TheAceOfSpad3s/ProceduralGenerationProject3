@@ -18,9 +18,18 @@ config/features=PackedStringArray("4.2", "Forward Plus")
 
 window/stretch/mode="canvas_items"
 
+[editor]
+
+import/reimport_missing_imported_files=false
+
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/simpleboards_plugin/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
+import/fbx/enabled=false
 
 [input]
 

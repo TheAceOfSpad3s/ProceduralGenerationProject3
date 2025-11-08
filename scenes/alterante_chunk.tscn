@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://cyb5lwihhtkcx"]
 
-[ext_resource type="Script" path="res://scenes/EditorChunk.gd" id="1_dwfb7"]
+[ext_resource type="Script" path="res://scripts/EditorChunk.gd" id="1_dwfb7"]
 [ext_resource type="Material" uid="uid://cxvg34l42whbq" path="res://Shaders/TerrainShader.tres" id="2_sw07a"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_y4dpi"]

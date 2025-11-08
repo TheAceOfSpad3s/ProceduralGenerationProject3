@@ -5,8 +5,12 @@ extends Control
 @onready var pause_menu = $PauseMenu
 @onready var retry_menu = $RetryMenu
 @onready var final_score_text = $RetryMenu/FinalScore
+@onready var leader_board = $LeaderBoard
+
+
 var paused = false
 var game_over = false
+
 func _on_score_manager_score_updated(score):
 	score_text.text = "Score: " + str(score)
 
@@ -16,7 +20,7 @@ func _ready():
 	pause_menu.hide()
 	options_menu.hide()
 	retry_menu.hide()
-
+	leader_board.hide()
 
 func _process(_delta):
 	if game_over:
@@ -81,9 +85,13 @@ func _on_main_game_over():
 	retry_menu.show()
 	score_text.hide()
 	game_over = true
-
+	leader_board.show()
 func _on_play_again_pressed():
 	await get_tree().create_timer(1.0).timeout
 	get_tree().change_scene_to_file("res://scenes/main.tscn")
 
 
+
+
+
+	

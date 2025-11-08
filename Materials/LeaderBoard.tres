@@ -1,0 +1,29 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://eqr4sqjrgg8q"]
+
+[ext_resource type="FontFile" uid="uid://0f58wm37x6gj" path="res://Game Logo/airstrike.ttf" id="1_p5qbb"]
+[ext_resource type="FontFile" uid="uid://b6ikd0ia7dnpg" path="res://Game Logo/Nulshock Bd.otf" id="2_donjw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qf2at"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4qiqp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mgvyq"]
+
+[resource]
+Button/font_sizes/font_size = 40
+Button/fonts/font = ExtResource("2_donjw")
+Button/styles/focus = SubResource("StyleBoxEmpty_qf2at")
+CheckButton/fonts/font = ExtResource("1_p5qbb")
+LineEdit/font_sizes/font_size = 40
+LineEdit/fonts/font = ExtResource("2_donjw")
+RichTextLabel/colors/font_outline_color = Color(0, 0, 0, 1)
+RichTextLabel/colors/font_shadow_color = Color(0, 0, 0, 0)
+RichTextLabel/constants/outline_size = 10
+RichTextLabel/constants/shadow_offset_x = 2
+RichTextLabel/constants/shadow_outline_size = 10
+RichTextLabel/font_sizes/italics_font_size = 50
+RichTextLabel/font_sizes/normal_font_size = 70
+RichTextLabel/fonts/bold_font = ExtResource("2_donjw")
+RichTextLabel/fonts/normal_font = ExtResource("2_donjw")
+RichTextLabel/styles/focus = SubResource("StyleBoxEmpty_4qiqp")
+RichTextLabel/styles/normal = SubResource("StyleBoxEmpty_mgvyq")
