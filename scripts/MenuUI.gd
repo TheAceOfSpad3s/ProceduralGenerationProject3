@@ -9,21 +9,24 @@ var pressed = false
 @onready var buttons = $Buttons
 @onready var title_logo = $"Title Logo"
 
-
+signal Transition(reverse: bool)
 func _ready():
+	Transition.emit(true)
 	await get_tree().create_timer(0.4).timeout
 	$"Title Logo/AnimationPlayer".play("Title_Slam")
 	buttons.visible = true
 	title_logo.visible = true
 	options_menu.visible = false
+
 func _on_play_pressed():
 	$Buttons/Play/jetpointer.visible = false
 	$Buttons/Play/Pressed.visible = true
 	$Buttons/Play/RichTextLabel.text = "[center][color=#000000]P[/color][color=#000000]L[/color][color=#000000]A[/color][color=#000000]Y[/color][/center]"
 	$Buttons/Play/RichTextLabel.add_theme_font_override("normal_font",HOVER_FONT)
 	pressed = true
-	await get_tree().create_timer(1.0).timeout
-	get_tree().change_scene_to_file("res://scenes/main.tscn")
+	Transition.emit(false)
+	await get_tree().create_timer(0.5).timeout
+	get_tree().change_scene_to_file("res://scenes/intro.tscn")
 
 
 func _on_options_pressed():

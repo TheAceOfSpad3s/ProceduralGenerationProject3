@@ -12,13 +12,13 @@ extends CharacterBody3D
 @export var vertical_speed := 10.0
 @export var roll_speed := 20.0
 @export var bank_rotation_speed := 5.0
-enum State {DEFUALT, ROLLING, DEAD}
+enum State {STARTING, DEFUALT, ROLLING, DEAD}
 enum CameraState {Mountain, Ravine, Transition}
 signal Player_Dead
 signal CurrentHeight
 signal AddScore
 signal Explode
-var currentState : State = State.DEFUALT
+var currentState : State = State.STARTING
 var currentCameraState: CameraState = CameraState.Mountain
 var camerafov = 110.0 if currentCameraState == CameraState.Mountain else 60.0
 # The nodes we need references to.
@@ -31,6 +31,9 @@ var camerafov = 110.0 if currentCameraState == CameraState.Mountain else 60.0
 @onready var graze_cooldown =$Graze/GrazeCooldown
 @onready var jet_model = $JetModel
 @onready var broken_jet_model = $BrokenJetModel
+@onready var trail_left = $JetModel/TrailLeft
+@onready var trail_right = $JetModel/TrailRight
+@onready var jet_smooth_enterance = $JetModel/jet_smooth_enterance
 # Consts
 var BANK_AMOUNT = PI/7.0
 var roll_x_direction = 0.0
@@ -47,7 +50,10 @@ func _physics_process(delta: float) -> void:
 		camera_target.rotation = lerp(camera_target.rotation, death_camera.rotation, delta * 3.0)
 		#In Order To Stop all Player Code(IMPORTANT)
 		return
-		
+	if currentState == State.STARTING:
+		#camera_controller.position.z = 0.0
+		jet_smooth_enterance.play("jet_smooth_enterance")
+		currentState = State.DEFUALT
 	var input_direction = Vector2(
 		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
 		Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
@@ -67,18 +73,18 @@ func _physics_process(delta: float) -> void:
 		velocity.y = -input_direction.y * vertical_speed
 
 		# --- 3. Smooth the Rotation
-		var target_rotation = Vector3(0, PI, 0)
+		var target_rotation = Vector3(0, 0, 0)
 		
 		# If we're turning left or right, we want to rotate on the Z-axis.
-		target_rotation.z = input_direction.x * BANK_AMOUNT
+		target_rotation.z = -input_direction.x * BANK_AMOUNT
 		# If we're moving up or down, we want to rotate on the X-axis.
-		target_rotation.x = input_direction.y * BANK_AMOUNT
+		target_rotation.x = -input_direction.y * BANK_AMOUNT
 		rotation = rotation.lerp(target_rotation, delta * bank_rotation_speed)
 
 	if currentState == State.ROLLING:
 		var elapsed_time = roll_timer.wait_time - roll_timer.time_left
 		# FIXED: Removed U+00A0 space after elapsed_time
-		rotation.z = angular_velocity * elapsed_time
+		rotation.z = -angular_velocity * elapsed_time
 		
 		velocity.x = roll_x_direction * roll_speed
 	# This function handles all movement and physics collisions for us!
@@ -87,6 +93,8 @@ func _physics_process(delta: float) -> void:
 		if collision:
 			# If we collide with something, change the state to DEAD
 			Player_Dead.emit()
+			trail_left.hide()
+			trail_right.hide()
 			Explode.emit()
 			jet_model.visible = false
 			broken_jet_model.visible = true
@@ -108,13 +116,13 @@ func _physics_process(delta: float) -> void:
 	#Changing Settings of Camera based on Chunk Type
 	if currentCameraState == CameraState.Mountain:
 		lerp_speed = 0.25
-		target_fov = 100.0
+		target_fov = 105.0
 		target_positon_camera = Vector3(0, 0.784, 1.635)
 		target_rotation_camera = Vector3(deg_to_rad(22.9), -PI, 0)
 	elif currentCameraState == CameraState.Ravine:
 		lerp_speed = 0.5
-		target_fov = 65.0
-		target_positon_camera = Vector3(0, 0.418, 1.56)
+		target_fov = 70.0
+		target_positon_camera = Vector3(0, 0.418, 1.635)
 		target_rotation_camera = Vector3(deg_to_rad(10), -PI, 0)
 	elif currentCameraState == CameraState.Transition:
 		lerp_speed = 0.25
@@ -129,7 +137,6 @@ func _physics_process(delta: float) -> void:
 	camera_target.position = lerp(camera_target.position, target_positon_camera, delta * 3.0)
 	camera_target.rotation = lerp(camera_target.rotation, target_rotation_camera, delta * 3.0)
 	CurrentHeight.emit(position.y)
-
 func _on_roll_timer_timeout():
 	roll_timer.stop()
 	
@@ -174,3 +181,7 @@ func _on_graze_cooldown_timeout():
 func _on_chunk_manager_end_of_chunk():
 	position.x = 0
 	position.y = 5
+
+func _ready():
+	trail_left.show()
+	trail_right.show()

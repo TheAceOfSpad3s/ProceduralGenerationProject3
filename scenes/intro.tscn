@@ -1,0 +1,530 @@
+[gd_scene load_steps=43 format=3 uid="uid://bnk4vuvv3a3mc"]
+
+[ext_resource type="PackedScene" uid="uid://b3g80s5355tck" path="res://Models/low-poly_aircraft_carrier.glb" id="1_o84t1"]
+[ext_resource type="Script" path="res://scripts/Intro_Player.gd" id="3_jwj65"]
+[ext_resource type="Shader" path="res://Shaders/Water.gdshader" id="3_xhyww"]
+[ext_resource type="PackedScene" uid="uid://condtk3qf3xqy" path="res://scenes/qte_bar.tscn" id="4_3f5ah"]
+[ext_resource type="ArrayMesh" uid="uid://bepj0eb4m4yio" path="res://Models/Jet_Model.tres" id="4_ftwp5"]
+[ext_resource type="Shader" path="res://GPUTrail-main/shaders/trail.gdshader" id="5_4oc4m"]
+[ext_resource type="Script" path="res://scripts/IntroCamera.gd" id="5_pdkhd"]
+[ext_resource type="Shader" path="res://GPUTrail-main/shaders/trail_draw_pass.gdshader" id="6_asd14"]
+[ext_resource type="Texture2D" uid="uid://crk6pkb7e5rwc" path="res://GPUTrail-main/defaults/texture.tres" id="7_36167"]
+[ext_resource type="Script" path="res://GPUTrail-main/GPUTrail3D.gd" id="8_blwlg"]
+[ext_resource type="PackedScene" uid="uid://cme424au4ucs1" path="res://scenes/transition.tscn" id="11_3aq2m"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1yajl"]
+render_priority = 0
+shader = ExtResource("3_xhyww")
+shader_parameter/out_color = Color(0, 0, 1, 1)
+shader_parameter/amount = 0.5
+shader_parameter/speed = 1.8
+shader_parameter/beer_factor = 0.2
+shader_parameter/metallic = 0.0
+shader_parameter/specular = 0.5
+shader_parameter/roughness = 0.2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_oev3m"]
+material = SubResource("ShaderMaterial_1yajl")
+size = Vector2(100, 100)
+subdivide_width = 50
+subdivide_depth = 100
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mambl"]
+sky_top_color = Color(0.345098, 0.592157, 0.980392, 1)
+sky_horizon_color = Color(0.827451, 0.568627, 0.419608, 1)
+ground_bottom_color = Color(0, 0, 1, 1)
+ground_horizon_color = Color(0.827451, 0.568627, 0.419608, 1)
+sun_angle_max = 186.51
+sun_curve = 0.0832177
+
+[sub_resource type="Sky" id="Sky_r4a21"]
+sky_material = SubResource("ProceduralSkyMaterial_mambl")
+
+[sub_resource type="Environment" id="Environment_4ajps"]
+background_mode = 2
+sky = SubResource("Sky_r4a21")
+ambient_light_color = Color(0.901961, 0.686275, 0, 1)
+ambient_light_energy = 0.0
+tonemap_mode = 3
+tonemap_white = 3.0
+ssr_fade_in = 7.53202
+ssr_fade_out = 42.2242
+ssr_depth_tolerance = 0.01
+ssao_enabled = true
+ssao_intensity = 1.0
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 1.5
+glow_strength = 0.9
+glow_bloom = 0.1
+glow_blend_mode = 1
+fog_light_color = Color(0.812883, 0.439088, 9.62615e-07, 1)
+fog_density = 0.001
+fog_sky_affect = 0.0
+fog_height = 1024.0
+volumetric_fog_density = 0.02
+adjustment_enabled = true
+adjustment_contrast = 1.04
+adjustment_saturation = 1.4
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4cfmv"]
+direction = Vector3(0, 0, 1)
+spread = 20.0
+initial_velocity_min = 0.7
+initial_velocity_max = 0.7
+gravity = Vector3(0, 0, 0)
+radial_accel_max = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1ps16"]
+shading_mode = 0
+albedo_color = Color(1, 0.254902, 0.184314, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_cq0fp"]
+material = SubResource("StandardMaterial3D_1ps16")
+size = Vector2(0.02, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dqyy8"]
+albedo_color = Color(0.270588, 0.352941, 0.392157, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_5f6se"]
+material = SubResource("StandardMaterial3D_dqyy8")
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jbdvd"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_aelag"]
+material = SubResource("StandardMaterial3D_jbdvd")
+height = 1.7
+
+[sub_resource type="Animation" id="Animation_qrnxw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("short_leg_left:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.667807, 0.28661, -4.2992)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("short_leg_left:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.232129, 0.0767947, -1.53118e-08)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("short_leg_right:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.232129, 0.0767947, -2.29678e-08)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("short_leg_right:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.710772, 0.317848, -4.27061)]
+}
+
+[sub_resource type="Animation" id="Animation_4m0l4"]
+resource_name = "wheels_retracting"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("short_leg_left:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.232129, 0.0767947, -1.53118e-08), Vector3(-1.18062, 0.26292, -0.248974)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("short_leg_right:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.232129, 0.0767947, -2.29678e-08), Vector3(-1.18062, 0.26292, -0.248974)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("short_leg_right:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.710772, 0.317848, -4.27061)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("short_leg_left:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.667807, 0.28661, -4.2992)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gnnoi"]
+_data = {
+"RESET": SubResource("Animation_qrnxw"),
+"wheels_retracting": SubResource("Animation_4m0l4")
+}
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_nq6iq"]
+
+[sub_resource type="Animation" id="Animation_5huxi"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:fov")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [90.0]
+}
+
+[sub_resource type="Animation" id="Animation_r0ala"]
+resource_name = "camera_impact_animation"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:fov")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.04, 0.08, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [90.0, 70.4, 70.0, 90.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mstqj"]
+_data = {
+"RESET": SubResource("Animation_5huxi"),
+"camera_impact_animation": SubResource("Animation_r0ala")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_slcro"]
+shader = ExtResource("5_4oc4m")
+
+[sub_resource type="Gradient" id="Gradient_rbiyd"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_yiyod"]
+gradient = SubResource("Gradient_rbiyd")
+
+[sub_resource type="Curve" id="Curve_w24d4"]
+bake_resolution = 16
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3wkye"]
+curve = SubResource("Curve_w24d4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hcuj4"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("6_asd14")
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/emmission_transform = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/flags = 40
+shader_parameter/tex = ExtResource("7_36167")
+shader_parameter/color_ramp = SubResource("GradientTexture1D_yiyod")
+shader_parameter/curve = SubResource("CurveTexture_3wkye")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ivres"]
+material = SubResource("ShaderMaterial_hcuj4")
+
+[sub_resource type="Animation" id="Animation_q5ks5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WorldEnvironment:environment:adjustment_brightness")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [8.0]
+}
+
+[sub_resource type="Animation" id="Animation_qdly6"]
+resource_name = "jet_impact_frame_animation"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("WorldEnvironment:environment:adjustment_brightness")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 8.0, 8.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nv7iy"]
+_data = {
+"RESET": SubResource("Animation_q5ks5"),
+"jet_impact_frame_animation": SubResource("Animation_qdly6")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_htk7o"]
+size = Vector3(1, 0.264648, 1.57733)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w78wf"]
+size = Vector3(12, 5, 1)
+
+[node name="Intro" type="Node3D"]
+
+[node name="3D" type="Node3D" parent="."]
+
+[node name="AirCraft Carrier" parent="3D" instance=ExtResource("1_o84t1")]
+
+[node name="Water" type="Node3D" parent="3D"]
+
+[node name="water_mesh" type="MeshInstance3D" parent="3D/Water"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 5.66767, 0, 0, 0)
+mesh = SubResource("PlaneMesh_oev3m")
+
+[node name="Lighting" type="Node3D" parent="3D"]
+
+[node name="Real Sun" type="DirectionalLight3D" parent="3D/Lighting"]
+transform = Transform3D(0.984503, 0.175367, 7.69572e-09, -0.174639, 0.980415, 0.0910324, 0.015964, -0.0896216, 0.995848, 0, 0, 0)
+light_color = Color(0.94392, 0.600498, 0, 1)
+light_energy = 1.8
+shadow_enabled = true
+shadow_bias = 0.0
+shadow_normal_bias = 2.594
+shadow_reverse_cull_face = true
+
+[node name="Real Sun2" type="DirectionalLight3D" parent="3D/Lighting"]
+transform = Transform3D(-0.984503, -0.175367, -8.7063e-08, -0.174645, 0.980451, 0.0906326, -0.0158939, 0.0892281, -0.995884, 0, 0, 0)
+light_color = Color(1, 0.768627, 0.00392157, 1)
+light_energy = 0.533
+shadow_bias = 0.0
+shadow_normal_bias = 2.594
+shadow_reverse_cull_face = true
+sky_mode = 1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="3D/Lighting"]
+environment = SubResource("Environment_4ajps")
+
+[node name="Jet" type="CharacterBody3D" parent="3D"]
+script = ExtResource("3_jwj65")
+
+[node name="JetModel" type="MeshInstance3D" parent="3D/Jet"]
+transform = Transform3D(0.149967, -0.00314136, 0, 0.0030772, 0.146904, 0.0301616, -0.000631658, -0.0301551, 0.146936, 0.0323775, 1.15664, -6.81658)
+mesh = ExtResource("4_ftwp5")
+skeleton = NodePath("")
+
+[node name="EngineLeft" type="GPUParticles3D" parent="3D/Jet/JetModel"]
+transform = Transform3D(-0.99999, 0, -0.0044681, 0, 1, 0, 0.0044681, 0, -0.99999, 0.6774, 0.0885589, -4.79693)
+visible = false
+amount = 3
+lifetime = 0.1
+explosiveness = 0.5
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_4cfmv")
+draw_pass_1 = SubResource("QuadMesh_cq0fp")
+
+[node name="EngineRight" type="GPUParticles3D" parent="3D/Jet/JetModel"]
+transform = Transform3D(-0.99999, 0, -0.0044681, 0, 1, 0, 0.0044681, 0, -0.99999, -0.685963, 0.0885589, -4.79693)
+visible = false
+amount = 3
+lifetime = 0.1
+explosiveness = 0.5
+randomness = 0.5
+process_material = SubResource("ParticleProcessMaterial_4cfmv")
+draw_pass_1 = SubResource("QuadMesh_cq0fp")
+
+[node name="legs" type="Node3D" parent="3D/Jet/JetModel"]
+
+[node name="Tall_Leg" type="Node3D" parent="3D/Jet/JetModel/legs"]
+transform = Transform3D(5.98231, 0.105896, 0.447969, -5.21541e-08, 5.83907, -1.3803, -0.460315, 1.37623, 5.82186, -0.0106021, -0.506132, 4.03521)
+
+[node name="wheel_stand" type="MeshInstance3D" parent="3D/Jet/JetModel/legs/Tall_Leg"]
+transform = Transform3D(0.05, 2.85218e-09, 4.19095e-09, -2.18279e-10, 0.3, 2.32831e-10, 2.32831e-09, -3.72529e-09, 0.05, 0.00128788, -0.0441213, 0.00186825)
+mesh = SubResource("CylinderMesh_5f6se")
+skeleton = NodePath("../../../../..")
+
+[node name="wheel_rim" type="MeshInstance3D" parent="3D/Jet/JetModel/legs/Tall_Leg"]
+transform = Transform3D(-5.03496e-09, -0.05, 3.72529e-09, 0.0600001, -2.06637e-09, -2.09548e-09, 9.31323e-10, 0, 0.0500001, 0.00123876, -0.282736, 0.00187302)
+mesh = SubResource("CylinderMesh_5f6se")
+skeleton = NodePath("../../../../..")
+
+[node name="wheel" type="MeshInstance3D" parent="3D/Jet/JetModel/legs/Tall_Leg"]
+transform = Transform3D(-4.71482e-09, -0.0550001, -3.72529e-09, 0.05, -3.4197e-09, -3.49246e-10, 1.62981e-09, 7.91624e-09, 0.0400001, -0.000346959, -0.28509, 0.004076)
+mesh = SubResource("CylinderMesh_aelag")
+skeleton = NodePath("../../../../..")
+
+[node name="short_leg_left" type="Node3D" parent="3D/Jet/JetModel/legs"]
+transform = Transform3D(3.98822, 0.0705971, 0.298646, -5.96046e-08, 3.89271, -0.920199, -0.306877, 0.917488, 3.88124, 0.667807, 0.28661, -4.2992)
+
+[node name="wheel_stand" type="MeshInstance3D" parent="3D/Jet/JetModel/legs/short_leg_left"]
+transform = Transform3D(0.05, 2.32831e-09, 5.12227e-09, -2.61934e-10, 0.3, 3.49246e-10, 2.32831e-09, -3.72529e-09, 0.05, 0.000837564, -0.133672, 0.00443745)
+mesh = SubResource("CylinderMesh_5f6se")
+skeleton = NodePath("../../../../..")
+
+[node name="wheel_rim" type="MeshInstance3D" parent="3D/Jet/JetModel/legs/short_leg_left"]
+transform = Transform3D(-5.03496e-09, -0.05, 3.72529e-09, 0.0600001, -2.06637e-09, -2.09548e-09, 9.31323e-10, 0, 0.0500001, 0.00123876, -0.282736, 0.00187302)
+mesh = SubResource("CylinderMesh_5f6se")
+skeleton = NodePath("../../../../..")
+
+[node name="wheel" type="MeshInstance3D" parent="3D/Jet/JetModel/legs/short_leg_left"]
+transform = Transform3D(-4.71482e-09, -0.0550001, -3.72529e-09, 0.05, -3.4197e-09, -3.49246e-10, 1.62981e-09, 7.91624e-09, 0.0400001, -0.000346959, -0.28509, 0.004076)
+mesh = SubResource("CylinderMesh_aelag")
+skeleton = NodePath("../../../../..")
+
+[node name="short_leg_right" type="Node3D" parent="3D/Jet/JetModel/legs"]
+transform = Transform3D(3.98822, 0.0705971, 0.298647, -8.94072e-08, 3.89271, -0.920201, -0.306877, 0.917488, 3.88125, -0.710772, 0.317848, -4.27061)
+
+[node name="wheel_stand" type="MeshInstance3D" parent="3D/Jet/JetModel/legs/short_leg_right"]
+transform = Transform3D(0.05, 3.0268e-09, 6.0536e-09, -2.03727e-10, 0.3, 5.82077e-10, 2.79397e-09, -4.65661e-09, 0.05, 0.000877202, -0.125784, 0.00420952)
+mesh = SubResource("CylinderMesh_5f6se")
+skeleton = NodePath("../../../../..")
+
+[node name="wheel_rim" type="MeshInstance3D" parent="3D/Jet/JetModel/legs/short_leg_right"]
+transform = Transform3D(-5.03496e-09, -0.05, 3.72529e-09, 0.0600001, -2.06637e-09, -2.09548e-09, 9.31323e-10, 0, 0.0500001, 0.00123876, -0.282736, 0.00187302)
+mesh = SubResource("CylinderMesh_5f6se")
+skeleton = NodePath("../../../../..")
+
+[node name="wheel" type="MeshInstance3D" parent="3D/Jet/JetModel/legs/short_leg_right"]
+transform = Transform3D(-4.71482e-09, -0.0550001, -3.72529e-09, 0.05, -3.4197e-09, -3.49246e-10, 1.62981e-09, 7.91624e-09, 0.0400001, -0.000346959, -0.28509, 0.004076)
+mesh = SubResource("CylinderMesh_aelag")
+skeleton = NodePath("../../../../..")
+
+[node name="wheels_retracting_animation" type="AnimationPlayer" parent="3D/Jet/JetModel/legs"]
+reset_on_save = false
+libraries = {
+"": SubResource("AnimationLibrary_gnnoi")
+}
+
+[node name="Camera" type="Node3D" parent="3D/Jet/JetModel"]
+transform = Transform3D(6.66521, 0.136765, -0.0280737, -0.139616, 6.52907, -1.34023, 2.15585e-09, 1.34052, 6.53052, -0.572904, -17.0433, 44.7209)
+
+[node name="Camera3D" type="Camera3D" parent="3D/Jet/JetModel/Camera"]
+transform = Transform3D(-0.999518, -0.0131691, 0.0281128, -0.00269112, 0.938915, 0.344139, -0.0309275, 0.343898, -0.938497, 0, 1.40734, -8.24271)
+fov = 90.0
+far = 100.0
+script = ExtResource("5_pdkhd")
+max_x = 15.0
+max_y = 20.0
+max_z = 10.0
+noise = SubResource("FastNoiseLite_nq6iq")
+
+[node name="camera_impact_animation" type="AnimationPlayer" parent="3D/Jet/JetModel/Camera"]
+libraries = {
+"": SubResource("AnimationLibrary_mstqj")
+}
+
+[node name="TrailLeft" type="GPUParticles3D" parent="3D/Jet/JetModel"]
+process_priority = 1
+transform = Transform3D(0.1, 0, 1.15463e-14, 0, 0.1, 0, -1.15463e-14, 0, 0.1, 4, 0.048, -3.333)
+visible = false
+amount = 7
+lifetime = 7.0
+explosiveness = 1.0
+fixed_fps = 100
+process_material = SubResource("ShaderMaterial_slcro")
+draw_pass_1 = SubResource("QuadMesh_ivres")
+script = ExtResource("8_blwlg")
+length = 7
+length_seconds = 0.07
+color_ramp = SubResource("GradientTexture1D_yiyod")
+curve = SubResource("CurveTexture_3wkye")
+_defaults_have_been_set = true
+
+[node name="TrailRight" type="GPUParticles3D" parent="3D/Jet/JetModel"]
+process_priority = 1
+transform = Transform3D(0.1, 0, 1.77636e-14, 0, 0.1, 0, -1.77636e-14, 0, 0.1, -4, 0.048, -3.333)
+visible = false
+amount = 7
+lifetime = 7.0
+explosiveness = 1.0
+fixed_fps = 100
+process_material = SubResource("ShaderMaterial_slcro")
+draw_pass_1 = SubResource("QuadMesh_ivres")
+script = ExtResource("8_blwlg")
+length = 7
+length_seconds = 0.07
+color_ramp = SubResource("GradientTexture1D_yiyod")
+curve = SubResource("CurveTexture_3wkye")
+_defaults_have_been_set = true
+
+[node name="jet_impact_frame_animation" type="AnimationPlayer" parent="3D/Jet/JetModel"]
+reset_on_save = false
+root_node = NodePath("../../../Lighting")
+libraries = {
+"": SubResource("AnimationLibrary_nv7iy")
+}
+
+[node name="htibox" type="Area3D" parent="3D/Jet"]
+
+[node name="hitbox_shape_area" type="CollisionShape3D" parent="3D/Jet/htibox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.03001, -6.94016)
+shape = SubResource("BoxShape3D_htk7o")
+
+[node name="hitbox_shape" type="CollisionShape3D" parent="3D/Jet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.03001, -6.94016)
+shape = SubResource("BoxShape3D_htk7o")
+
+[node name="Flying_checkpoint" type="Area3D" parent="3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="3D/Flying_checkpoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.103343, 2, 2.60973)
+shape = SubResource("BoxShape3D_w78wf")
+
+[node name="QTE Bar" parent="." instance=ExtResource("4_3f5ah")]
+
+[node name="Transition" parent="." instance=ExtResource("11_3aq2m")]
+
+[connection signal="ScreenShake" from="3D/Jet" to="3D/Jet/JetModel/Camera/Camera3D" method="_on_jet_screen_shake"]
+[connection signal="Start_QTE_Bar" from="3D/Jet" to="QTE Bar" method="_on_jet_start_qte_bar"]
+[connection signal="Transition" from="3D/Jet" to="Transition" method="_on_jet_transition"]
+[connection signal="area_entered" from="3D/Flying_checkpoint" to="3D/Jet" method="_on_flying_checkpoint_area_entered"]
+[connection signal="qte_result" from="QTE Bar" to="3D/Jet" method="_on_qte_bar_qte_result"]

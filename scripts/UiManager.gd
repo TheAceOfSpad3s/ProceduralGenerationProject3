@@ -6,7 +6,9 @@ extends Control
 @onready var retry_menu = $RetryMenu
 @onready var final_score_text = $RetryMenu/FinalScore
 @onready var leader_board = $LeaderBoard
+@onready var transition = $Transition
 
+signal Transition(reverse: bool)
 
 var paused = false
 var game_over = false
@@ -21,7 +23,7 @@ func _ready():
 	options_menu.hide()
 	retry_menu.hide()
 	leader_board.hide()
-
+	Transition.emit(true)
 func _process(_delta):
 	if game_over:
 		return
@@ -47,6 +49,7 @@ func _on_options_pressed():
 	if not game_over:
 		pause_menu.hide()
 	else:
+		leader_board.hide()
 		retry_menu.hide()
 	options_menu.show()
 
@@ -60,6 +63,7 @@ func _on_back_pressed():
 	if not game_over:
 		pause_menu.show()
 	else:
+		leader_board.show()
 		retry_menu.show()
 	options_menu.hide()
 	
@@ -87,10 +91,9 @@ func _on_main_game_over():
 	game_over = true
 	leader_board.show()
 func _on_play_again_pressed():
-	await get_tree().create_timer(1.0).timeout
-	get_tree().change_scene_to_file("res://scenes/main.tscn")
-
-
+	Transition.emit(false)
+	await get_tree().create_timer(0.5).timeout
+	get_tree().change_scene_to_file("res://scenes/intro.tscn")
 
 
 

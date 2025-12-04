@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://dnld7hmree0c6"]
+[gd_scene load_steps=42 format=3 uid="uid://dnld7hmree0c6"]
 
 [ext_resource type="PackedScene" uid="uid://b3g80s5355tck" path="res://Models/low-poly_aircraft_carrier.glb" id="1_4ori8"]
 [ext_resource type="PackedScene" uid="uid://bf01xr5ocajub" path="res://Models/Jet.glb" id="2_vn0y5"]
@@ -16,18 +16,19 @@
 [ext_resource type="Script" path="res://scripts/ScaleControl.gd" id="11_6jcue"]
 [ext_resource type="FontFile" uid="uid://0f58wm37x6gj" path="res://Game Logo/airstrike.ttf" id="15_055we"]
 [ext_resource type="Texture2D" uid="uid://do5flapghgiyi" path="res://Game Logo/Gemini_Generated_Image_sxv4vosxv4vosxv4-Photoroom.png" id="15_jwkjh"]
+[ext_resource type="PackedScene" uid="uid://cme424au4ucs1" path="res://scenes/transition.tscn" id="17_chhkk"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dqyy8"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3brhx"]
 albedo_color = Color(0.270588, 0.352941, 0.392157, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_h010x"]
-material = SubResource("StandardMaterial3D_dqyy8")
+material = SubResource("StandardMaterial3D_3brhx")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jbdvd"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h5s0j"]
 albedo_color = Color(0, 0, 0, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_dl5ao"]
-material = SubResource("StandardMaterial3D_jbdvd")
+material = SubResource("StandardMaterial3D_h5s0j")
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3sunf"]
 sky_top_color = Color(0.345098, 0.592157, 0.980392, 1)
@@ -37,12 +38,12 @@ ground_horizon_color = Color(0.827451, 0.568627, 0.419608, 1)
 sun_angle_max = 360.0
 sun_curve = 0.0832177
 
-[sub_resource type="Sky" id="Sky_r4a21"]
+[sub_resource type="Sky" id="Sky_7007d"]
 sky_material = SubResource("ProceduralSkyMaterial_3sunf")
 
 [sub_resource type="Environment" id="Environment_cphfj"]
 background_mode = 2
-sky = SubResource("Sky_r4a21")
+sky = SubResource("Sky_7007d")
 ambient_light_color = Color(0.901961, 0.686275, 0, 1)
 ambient_light_energy = 0.0
 tonemap_mode = 3
@@ -67,7 +68,7 @@ adjustment_enabled = true
 adjustment_contrast = 1.04
 adjustment_saturation = 1.1
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1yajl"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_glndw"]
 render_priority = 0
 shader = ExtResource("3_er6o2")
 shader_parameter/out_color = Color(0, 0, 1, 1)
@@ -79,7 +80,7 @@ shader_parameter/specular = 0.5
 shader_parameter/roughness = 0.2
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_4wobf"]
-material = SubResource("ShaderMaterial_1yajl")
+material = SubResource("ShaderMaterial_glndw")
 size = Vector2(100, 100)
 subdivide_width = 50
 subdivide_depth = 50
@@ -423,7 +424,8 @@ mesh = SubResource("PlaneMesh_4wobf")
 
 [node name="Fake Sun" type="DirectionalLight3D" parent="3D/Lighting"]
 transform = Transform3D(-0.719309, -0.267291, 0.64121, -0.438175, 0.890816, -0.120204, -0.539071, -0.367426, -0.757892, 0, 0, 0)
-light_color = Color(1, 0.529412, 0.498039, 1)
+light_color = Color(1, 0.466667, 0, 1)
+light_energy = 2.496
 shadow_enabled = true
 
 [node name="Real Sun" type="DirectionalLight3D" parent="3D/Lighting"]
@@ -448,6 +450,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_fp3rv")
@@ -967,6 +970,10 @@ offset_bottom = 54.0
 texture = ExtResource("15_jwkjh")
 expand_mode = 1
 
+[node name="Transition" parent="UI" instance=ExtResource("17_chhkk")]
+layout_mode = 1
+
+[connection signal="Transition" from="UI" to="UI/Transition" method="_on_ui_transition"]
 [connection signal="mouse_entered" from="UI/OptionsMenu/Back" to="UI" method="_on_back_mouse_entered"]
 [connection signal="mouse_exited" from="UI/OptionsMenu/Back" to="UI" method="_on_back_mouse_exited"]
 [connection signal="pressed" from="UI/OptionsMenu/Back" to="UI" method="_on_back_pressed"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://j7eb2cgdfiyg"]
+[gd_scene load_steps=32 format=3 uid="uid://j7eb2cgdfiyg"]
 
 [ext_resource type="Script" path="res://scripts/Player.gd" id="1_bdvmp"]
 [ext_resource type="Shader" path="res://GPUTrail-main/shaders/trail.gdshader" id="2_api5v"]
@@ -11,21 +11,21 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_huev6"]
 shader = ExtResource("2_api5v")
 
-[sub_resource type="Gradient" id="Gradient_rx6r4"]
+[sub_resource type="Gradient" id="Gradient_86vge"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_m1c1u"]
-gradient = SubResource("Gradient_rx6r4")
+gradient = SubResource("Gradient_86vge")
 
-[sub_resource type="Curve" id="Curve_2bg6l"]
+[sub_resource type="Curve" id="Curve_y0h21"]
 bake_resolution = 16
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.1), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_m4tw0"]
-curve = SubResource("Curve_2bg6l")
+curve = SubResource("Curve_y0h21")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jyfid"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5vkn8"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("3_agft2")
@@ -37,7 +37,7 @@ shader_parameter/color_ramp = SubResource("GradientTexture1D_m1c1u")
 shader_parameter/curve = SubResource("CurveTexture_m4tw0")
 
 [sub_resource type="QuadMesh" id="QuadMesh_ldgf0"]
-material = SubResource("ShaderMaterial_jyfid")
+material = SubResource("ShaderMaterial_5vkn8")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_n8nah"]
 direction = Vector3(0, 0, 1)
@@ -47,13 +47,49 @@ initial_velocity_max = 0.7
 gravity = Vector3(0, 0, 0)
 radial_accel_max = 0.2
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1ps16"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_56ut3"]
 shading_mode = 0
 albedo_color = Color(1, 0.254902, 0.184314, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_o4w22"]
-material = SubResource("StandardMaterial3D_1ps16")
+material = SubResource("StandardMaterial3D_56ut3")
 size = Vector2(0.02, 0.02)
+
+[sub_resource type="Animation" id="Animation_0sum3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_dke7c"]
+resource_name = "jet_smooth_enterance"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 10), Vector3(0, 0, 1.5), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lbhy6"]
+_data = {
+"RESET": SubResource("Animation_0sum3"),
+"jet_smooth_enterance": SubResource("Animation_dke7c")
+}
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cyk4r"]
 size = Vector3(0.720822, 0.0892945, 1.23472)
@@ -201,19 +237,19 @@ emission_enabled = true
 emission = Color(0.956863, 0.243137, 0, 1)
 
 [node name="Jet" type="CharacterBody3D"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 collision_mask = 2
 motion_mode = 1
 script = ExtResource("1_bdvmp")
 
 [node name="JetModel" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -3.26315e-08, 0, 0.373261)
+transform = Transform3D(-0.2, 0, -1.74846e-08, 0, 0.2, 0, 1.74846e-08, 0, -0.2, 0, 0, 1.5)
 mesh = ExtResource("2_wylbm")
 skeleton = NodePath("")
 
 [node name="TrailLeft" type="GPUParticles3D" parent="JetModel"]
 process_priority = 1
 transform = Transform3D(0.1, 0, 1.15463e-14, 0, 0.1, 0, -1.15463e-14, 0, 0.1, 4, 0.048, -3.333)
+visible = false
 amount = 7
 lifetime = 7.0
 explosiveness = 1.0
@@ -230,6 +266,7 @@ _defaults_have_been_set = true
 [node name="TrailRight" type="GPUParticles3D" parent="JetModel"]
 process_priority = 1
 transform = Transform3D(0.1, 0, 1.77636e-14, 0, 0.1, 0, -1.77636e-14, 0, 0.1, -4, 0.048, -3.333)
+visible = false
 amount = 7
 lifetime = 7.0
 explosiveness = 1.0
@@ -261,6 +298,12 @@ randomness = 0.5
 process_material = SubResource("ParticleProcessMaterial_n8nah")
 draw_pass_1 = SubResource("QuadMesh_o4w22")
 
+[node name="jet_smooth_enterance" type="AnimationPlayer" parent="JetModel"]
+reset_on_save = false
+libraries = {
+"": SubResource("AnimationLibrary_lbhy6")
+}
+
 [node name="HitBox" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, -0.000144896, -0.000780558, 0.000144524, 1, -0.000507988, 0.000780627, 0.000507882, 1, -0.00228641, 0.0117058, 0.184821)
 shape = SubResource("BoxShape3D_cyk4r")
@@ -273,21 +316,6 @@ wait_time = 0.75
 wait_time = 0.5
 one_shot = true
 autostart = true
-
-[node name="CameraController" type="Node3D" parent="."]
-top_level = true
-
-[node name="CameraTarget" type="Node3D" parent="CameraController"]
-transform = Transform3D(-1, -2.62201e-08, -1.48702e-07, 0, 0.984807, -0.173648, 1.50996e-07, -0.173648, -0.984807, 0, 0.417999, 1.56011)
-
-[node name="PlayerCamera" type="Camera3D" parent="CameraController/CameraTarget"]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
-fov = 60.0
-far = 120.0
-
-[node name="DeathCamera" type="Camera3D" parent="CameraController/CameraTarget"]
-transform = Transform3D(0.0548485, -0.184867, -0.981232, 0.197465, 0.965311, -0.17083, 0.978775, -0.184389, 0.0894507, -4.4102, -0.474778, 2.05577)
-visible = false
 
 [node name="Graze" type="Node3D" parent="."]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -3.26315e-08, 0, 0.373261)
@@ -307,12 +335,26 @@ one_shot = true
 [node name="Explosion" parent="." instance=ExtResource("6_317qs")]
 
 [node name="BrokenJetModel" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0.373)
+transform = Transform3D(-0.2, 0, -1.74846e-08, 0, 0.2, 0, 1.74846e-08, 0, -0.2, 0, 0, 0.373)
 visible = false
 mesh = SubResource("ArrayMesh_7h35s")
 surface_material_override/0 = SubResource("StandardMaterial3D_mqviv")
 surface_material_override/1 = SubResource("StandardMaterial3D_x2hgf")
 surface_material_override/3 = SubResource("StandardMaterial3D_fcoxt")
+
+[node name="CameraController" type="Node3D" parent="."]
+top_level = true
+
+[node name="CameraTarget" type="Node3D" parent="CameraController"]
+transform = Transform3D(-1, -2.62201e-08, -1.48702e-07, 0, 0.984807, -0.173648, 1.50996e-07, -0.173648, -0.984807, 1.42109e-14, 0.417999, 1.56011)
+
+[node name="PlayerCamera" type="Camera3D" parent="CameraController/CameraTarget"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+fov = 60.0
+far = 120.0
+
+[node name="DeathCamera" type="Camera3D" parent="CameraController/CameraTarget"]
+transform = Transform3D(0.0546969, -0.184271, -0.981353, 0.198144, 0.965281, -0.17021, 0.978646, -0.185139, 0.0893101, -4.41, -0.475, 2.056)
 
 [connection signal="Explode" from="." to="Explosion" method="_on_jet_explode"]
 [connection signal="timeout" from="RollTimer" to="." method="_on_roll_timer_timeout"]

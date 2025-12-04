@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://27b0ftbl3gd3"]
+[gd_scene load_steps=41 format=3 uid="uid://27b0ftbl3gd3"]
 
 [ext_resource type="PackedScene" uid="uid://j7eb2cgdfiyg" path="res://scenes/Player.tscn" id="1_lx46h"]
 [ext_resource type="Script" path="res://scripts/GameManager.gd" id="1_vh5m1"]
@@ -17,6 +17,7 @@
 [ext_resource type="FontFile" uid="uid://hnp6lr30npli" path="res://Game Logo/airstrikebold.ttf" id="12_40jwx"]
 [ext_resource type="Script" path="res://addons/simpleboards_plugin/SimpleBoardsApi.gd" id="13_o6u0d"]
 [ext_resource type="Theme" uid="uid://eqr4sqjrgg8q" path="res://Materials/LeaderBoard.tres" id="15_ipoj7"]
+[ext_resource type="PackedScene" uid="uid://cme424au4ucs1" path="res://scenes/transition.tscn" id="16_uv8m5"]
 [ext_resource type="FontFile" uid="uid://d2vspw7af4kks" path="res://Game Logo/airstrikeexpand.ttf" id="17_1f2uu"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n14aj"]
@@ -597,6 +598,9 @@ layout_mode = 2
 theme = ExtResource("15_ipoj7")
 text = "SUBMIT SCORE"
 
+[node name="Transition" parent="UiManager" instance=ExtResource("16_uv8m5")]
+layout_mode = 1
+
 [node name="ScoreManager" type="Node3D" parent="."]
 script = ExtResource("4_on7fe")
 
@@ -671,6 +675,7 @@ sky_mode = 1
 [connection signal="Is_Scoring" from="ChunkManager" to="ScoreManager" method="_on_chunk_manager_is_scoring"]
 [connection signal="chunk_type" from="ChunkManager" to="Player" method="_on_chunk_manager_chunk_type"]
 [connection signal="chunk_type" from="ChunkManager" to="Environment" method="_on_chunk_manager_chunk_type"]
+[connection signal="Transition" from="UiManager" to="UiManager/Transition" method="_on_ui_manager_transition"]
 [connection signal="mouse_entered" from="UiManager/OptionsMenu/Back" to="UiManager" method="_on_back_mouse_entered"]
 [connection signal="mouse_exited" from="UiManager/OptionsMenu/Back" to="UiManager" method="_on_back_mouse_exited"]
 [connection signal="pressed" from="UiManager/OptionsMenu/Back" to="UiManager" method="_on_back_pressed"]
